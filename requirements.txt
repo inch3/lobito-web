@@ -1,0 +1,14 @@
+jupyterlab
+pandas
+geopandas
+scikit-learn
+xgboost
+matplotlib
+seaborn
+folium
+shapely
+pyproj
+geemap
+earthengine-api
+owslib
+joblib

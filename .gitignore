@@ -1,0 +1,33 @@
+# Virtual environment
+venv/
+.venv/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Raw data (large geodatabases, shapefiles, etc.)
+data/raw/
+
+# Processed CSVs (reproducible from notebooks)
+data/processed/*.csv
+
+# Model artifacts
+models/*.joblib
+
+# Figures (reproducible from notebooks)
+figures/*.png
+figures/*.html
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/

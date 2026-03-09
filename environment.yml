@@ -1,0 +1,22 @@
+name: mine-classifier
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  - python=3.11
+  - jupyterlab
+  - pandas
+  - geopandas
+  - scikit-learn
+  - xgboost
+  - matplotlib
+  - seaborn
+  - folium
+  - shapely
+  - pyproj
+  - pip
+  - pip:
+      - geemap
+      - earthengine-api
+      - owslib
+      - joblib

@@ -1,0 +1,1074 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Lobito-korridoren: Kampen om Afrikas kritiske mineraler</title>
+
+        <!-- MapLibre GL -->
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/maplibre-gl@4.1.2/dist/maplibre-gl.css"
+        />
+        <script src="https://unpkg.com/maplibre-gl@4.1.2/dist/maplibre-gl.js"></script>
+
+        <!-- Scrollama -->
+        <script src="https://unpkg.com/scrollama@3.2.0/build/scrollama.min.js"></script>
+
+        <!-- Inter font -->
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link
+            href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"
+            rel="stylesheet"
+        />
+
+        <style>
+            *,
+            *::before,
+            *::after {
+                box-sizing: border-box;
+                margin: 0;
+                padding: 0;
+            }
+
+            body {
+                font-family:
+                    "Inter",
+                    -apple-system,
+                    sans-serif;
+                background: #0a0a0a;
+                color: #e8e8e8;
+                overflow-x: hidden;
+            }
+
+            #map {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100vw;
+                height: 100vh;
+                z-index: 0;
+                pointer-events: none;
+            }
+
+            #scrolly {
+                position: relative;
+                z-index: 1;
+            }
+
+            .step {
+                pointer-events: auto;
+                max-width: 420px;
+                margin: 0 0 0 40px;
+                padding: 45vh 20px;
+                opacity: 0.12;
+                transition: opacity 0.4s ease;
+            }
+            .step:first-child {
+                padding-top: 70vh;
+            }
+            .step:last-child {
+                padding-bottom: 70vh;
+            }
+            .step.is-active {
+                opacity: 1;
+            }
+
+            .step-inner {
+                background: rgba(10, 10, 10, 0.88);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 12px;
+                padding: 28px 26px;
+                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+            }
+            .step-inner h2 {
+                font-size: 22px;
+                font-weight: 700;
+                margin-bottom: 12px;
+                line-height: 1.25;
+            }
+            .step-inner p {
+                font-size: 15px;
+                line-height: 1.65;
+                color: #b8b8b8;
+                margin-bottom: 10px;
+            }
+            .step-inner p:last-child {
+                margin-bottom: 0;
+            }
+            .step-inner .stat {
+                font-size: 36px;
+                font-weight: 900;
+                color: #fff;
+                display: block;
+                margin: 8px 0;
+            }
+            .step-inner .label {
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                color: #666;
+                margin-bottom: 6px;
+            }
+            .step-inner .accent {
+                color: #ff6b35;
+            }
+            .step-inner .china {
+                color: #e63946;
+            }
+            .step-inner .western {
+                color: #457b9d;
+            }
+            .step-inner .state {
+                color: #e9c46a;
+            }
+            .step-inner .eu {
+                color: #2a9d8f;
+            }
+            .step-inner .dk {
+                color: #c8102e;
+            }
+
+            .step-inner .legend-row {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                margin: 4px 0;
+                font-size: 14px;
+            }
+            .legend-dot {
+                width: 10px;
+                height: 10px;
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+
+            #hero {
+                position: relative;
+                z-index: 2;
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-end;
+                padding: 0 24px 80px;
+                pointer-events: none;
+            }
+            #hero h1 {
+                font-size: clamp(32px, 6vw, 56px);
+                font-weight: 900;
+                line-height: 1.1;
+                max-width: 700px;
+            }
+            #hero .subtitle {
+                font-size: 17px;
+                color: #999;
+                margin-top: 14px;
+                max-width: 550px;
+                line-height: 1.5;
+            }
+            #hero .scroll-hint {
+                margin-top: 30px;
+                font-size: 13px;
+                color: #555;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+                animation: pulse 2s ease-in-out infinite;
+            }
+            @keyframes pulse {
+                0%,
+                100% {
+                    opacity: 0.4;
+                }
+                50% {
+                    opacity: 1;
+                }
+            }
+
+            #outro {
+                position: relative;
+                z-index: 2;
+                min-height: 100vh;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 60px 24px;
+                pointer-events: auto;
+            }
+            #outro h2 {
+                font-size: 32px;
+                font-weight: 700;
+                max-width: 600px;
+                margin-bottom: 20px;
+            }
+            #outro p {
+                font-size: 16px;
+                color: #888;
+                max-width: 500px;
+                line-height: 1.6;
+                margin-bottom: 10px;
+            }
+            #outro .source {
+                font-size: 12px;
+                color: #444;
+                margin-top: 30px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div id="hero">
+            <h1>Lobito-korridoren: Kampen om Afrikas kritiske mineraler</h1>
+            <p class="subtitle">
+                En jernbane fra Atlanterhavet til kobberbeltet. Kinesiske og
+                vestlige selskaber kappes om de mineraler, der driver den gronne
+                omstilling — og ender i din elbil.
+            </p>
+            <div class="scroll-hint">Scroll ned for at udforske &#x2193;</div>
+        </div>
+
+        <div id="map"></div>
+
+        <div id="scrolly">
+            <div class="step" data-chapter="lobito">
+                <div class="step-inner">
+                    <div class="label">Kapitel 1</div>
+                    <h2>Lobito: Porten til Afrika</h2>
+                    <p>
+                        Lobito-havnen pa Angolas atlanterhavskyst er
+                        startpunktet for en jernbanelinje, der strækker sig
+                        1.300 km ind i hjertet af det centralafrikanske
+                        kobberbælte.
+                    </p>
+                    <p>
+                        Korridoren er et nogleelement i
+                        <span class="accent">EU's og USA's strategi</span> for
+                        at bryde Kinas dominans over forsyningskæden for
+                        kritiske mineraler.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step" data-chapter="railway">
+                <div class="step-inner">
+                    <div class="label">Kapitel 2</div>
+                    <h2>Benguela-jernbanen</h2>
+                    <p>
+                        Jernbanen blev oprindeligt bygget i kolonitiden for at
+                        fragte mineraler fra det indre af kontinentet til
+                        kysten. Efter artier med borgerkrig blev den genopbygget
+                        med <span class="china">kinesisk finansiering</span> i
+                        2014.
+                    </p>
+                    <p>
+                        Nu er den genstand for fornyet vestlig interesse som et
+                        alternativ til Kinas Bælte- og Vejinitiativ.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step" data-chapter="copperbelt">
+                <div class="step-inner">
+                    <div class="label">Kapitel 3</div>
+                    <h2>Kobberbeltet</h2>
+                    <p>
+                        I grænseomradet mellem DR Congo og Zambia ligger et af
+                        verdens rigeste mineralomrader. Geologien — Katanga
+                        Supergroup — indeholder enorme forekomster af kobber og
+                        kobolt.
+                    </p>
+                    <span class="stat">287</span>
+                    <p>
+                        mineomrader er identificeret fra satellit i korridoren
+                        alene.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step" data-chapter="geology">
+                <div class="step-inner">
+                    <div class="label">Kapitel 4</div>
+                    <h2>Geologien forst — jernbanen fulgte</h2>
+                    <p>
+                        De rode omrader viser USGS-kortlagte
+                        kobberressource-trakter. Minerne klynger sig sammen her,
+                        fordi geologien er ekstraordinært rig.
+                    </p>
+                    <p>
+                        Jernbanen blev bygget <em>til</em> mineralerne. Derefter
+                        tiltrak jernbanen flere miner. En selvforstærkende
+                        cyklus.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step" data-chapter="ownership">
+                <div class="step-inner">
+                    <div class="label">Kapitel 5</div>
+                    <h2>Hvem ejer hvad?</h2>
+                    <p>
+                        Ejerskabet over Afrikas mineraler er en geopolitisk
+                        slagmark.
+                    </p>
+                    <div class="legend-row">
+                        <div
+                            class="legend-dot"
+                            style="background: #e63946"
+                        ></div>
+                        <span
+                            ><strong class="china">Kinesisk</strong> — 21
+                            anlæg</span
+                        >
+                    </div>
+                    <div class="legend-row">
+                        <div
+                            class="legend-dot"
+                            style="background: #457b9d"
+                        ></div>
+                        <span
+                            ><strong class="western">Vestligt</strong> — 50
+                            anlæg</span
+                        >
+                    </div>
+                    <div class="legend-row">
+                        <div
+                            class="legend-dot"
+                            style="background: #e9c46a"
+                        ></div>
+                        <span
+                            ><strong class="state">Statsejede</strong> — 11
+                            anlæg</span
+                        >
+                    </div>
+                    <p style="margin-top: 12px">
+                        Kina kontrollerer noglefaciliteter som
+                        <span class="china">Tenke Fungurume</span> (China
+                        Molybdenum, 80%) — verdens storste koboltmine.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step" data-chapter="china-detail">
+                <div class="step-inner">
+                    <div class="label">Kapitel 6</div>
+                    <h2>Kinas greb om kobolten</h2>
+                    <p>
+                        DR Congo producerer
+                        <span class="stat" style="font-size: 28px">~70%</span>
+                        af verdens kobolt. Det meste kontrolleres af kinesiske
+                        selskaber:
+                    </p>
+                    <p>
+                        <span class="china">China Molybdenum</span> — Tenke
+                        Fungurume<br />
+                        <span class="china">Zijin Mining</span> — Kolwezi
+                        (COMMUS)<br />
+                        <span class="china">CNMC / Jinchuan</span> — Ruashi,
+                        Chambishi<br />
+                        <span class="china">Sicomines</span> — Mashamba West
+                    </p>
+                    <p>Men hvor ender mineralerne?</p>
+                </div>
+            </div>
+
+            <div class="step" data-chapter="supply-chain">
+                <div class="step-inner">
+                    <div class="label">Kapitel 7</div>
+                    <h2>Forsyningskæden: Fra mine til havn</h2>
+                    <p>
+                        Mineralerne fragtes med jernbane fra kobberbeltet vestpa
+                        til <span class="accent">Lobito-havnen</span>. Herfra
+                        sejler de videre — primaert mod Europa og Kina.
+                    </p>
+                    <p>
+                        Lobito-korridoren er den korteste rute fra det
+                        centralafrikanske kobberbælte til Atlanterhavet:
+                        <span class="stat" style="font-size: 24px"
+                            >1.300 km</span
+                        >
+                        versus tusindvis af kilometer via ostafrikanske havne.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step" data-chapter="europe-arcs">
+                <div class="step-inner">
+                    <div class="label">Kapitel 8</div>
+                    <h2>Kursen mod Europa</h2>
+                    <p>
+                        Fra Lobito sejler skibene mod europæiske raffinaderier
+                        og fabrikker. Kobolten og kobberet ender i:
+                    </p>
+                    <p>
+                        <span class="eu">Umicore</span> (Bruxelles) — verdens
+                        storste kobolt-raffinaderi<br />
+                        <span class="eu">Aurubis</span> (Hamburg) — Europas
+                        storste kobber-smeltevaerk<br />
+                        <span class="eu">Northvolt</span> (Skelleftea) — Europas
+                        storste batterifabrik<br />
+                        <span class="eu">Tesla</span> (Berlin) — Gigafactory for
+                        Model Y
+                    </p>
+                </div>
+            </div>
+
+            <div class="step" data-chapter="denmark">
+                <div class="step-inner">
+                    <div class="label">Kapitel 9</div>
+                    <h2>Den danske forbindelse</h2>
+                    <p>
+                        Danmark er tættere forbundet med Lobito-korridoren end
+                        man tror:
+                    </p>
+                    <p>
+                        <span class="dk">Maersk</span> opererer olieblokke i
+                        Angola (Block 8 og 16) og er en af verdens storste
+                        container-rederier — de sejler mineralerne.
+                    </p>
+                    <p>
+                        <span class="dk">Danida</span> er engageret i regionen
+                        med udviklingsbistand.
+                    </p>
+                    <p>
+                        Kobolten i din <strong>Volvo EX30</strong> (bygget i
+                        Ghent, solgt i Danmark) eller din
+                        <strong>iPhone</strong> kan stamme direkte fra disse
+                        miner.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step" data-chapter="eu-policy">
+                <div class="step-inner">
+                    <div class="label">Kapitel 10</div>
+                    <h2>EU's svar: Critical Raw Materials Act</h2>
+                    <p>
+                        EU's
+                        <span class="eu">Critical Raw Materials Act</span>
+                        (2024) udpeger kobber og kobolt som strategiske
+                        materialer. Malet er at:
+                    </p>
+                    <p>
+                        &#x2022; Udvinde mindst <strong>10%</strong> af EU's
+                        behov internt<br />
+                        &#x2022; Forarbejde mindst <strong>40%</strong> i
+                        Europa<br />
+                        &#x2022; Sikre at ingen tredjeland leverer mere end
+                        <strong>65%</strong>
+                    </p>
+                    <p>
+                        Lobito-korridoren er central i denne strategi — et
+                        alternativ til den kinesisk-dominerede forsyningskæde
+                        via ostafrikanske havne.
+                    </p>
+                </div>
+            </div>
+
+            <div class="step" data-chapter="final">
+                <div class="step-inner">
+                    <div class="label">Konklusion</div>
+                    <h2>En korridor, to verdensordener</h2>
+                    <p>
+                        Lobito-korridoren er mere end en jernbane. Det er
+                        frontlinjen i en global kamp om de mineraler, der skal
+                        drive den gronne omstilling.
+                    </p>
+                    <p>
+                        Fra minen i Kolwezi til batteriet i din bil —
+                        forsyningskæden er lang, geopolitisk og dybt omstridt.
+                    </p>
+                    <p>
+                        <em
+                            >Sporgsmaalet er: Hvem far gavn af Afrikas rigdom
+                            denne gang?</em
+                        >
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div id="outro">
+            <h2>Datakilder og metode</h2>
+            <p>
+                Minedata: USGS Africa Mineral Industries Geodatabase, Maus et
+                al. (2022) Global Mining Polygons, IPIS DRC Open Data.
+            </p>
+            <p>
+                Satellitbilleder: Copernicus Sentinel-2 via Google Earth Engine.
+                Ejerskabsdata: USGS facility records.
+            </p>
+            <p>
+                Jernbane: USGS Africa GIS Transport layer. Byer: Natural Earth
+                10m Populated Places.
+            </p>
+            <p>
+                Forsyningskæde-ruter er illustrative og baseret pa kendte
+                handelsruter og virksomhedsforbindelser.
+            </p>
+            <div class="source">
+                Bygget med MapLibre GL JS + Scrollama. Data pr. marts 2026.
+            </div>
+        </div>
+
+        <script>
+            const CHAPTERS = {
+                lobito: {
+                    center: [13.55, -12.34],
+                    zoom: 10,
+                    pitch: 40,
+                    bearing: 20,
+                    layers: ["railway"],
+                },
+                railway: {
+                    center: [20.5, -11.8],
+                    zoom: 5.5,
+                    pitch: 30,
+                    bearing: 0,
+                    layers: ["railway", "cities-labels"],
+                },
+                copperbelt: {
+                    center: [27.0, -11.5],
+                    zoom: 7.5,
+                    pitch: 40,
+                    bearing: -15,
+                    layers: ["railway", "maus-polygons", "cities-labels"],
+                },
+                geology: {
+                    center: [26.5, -11.2],
+                    zoom: 7,
+                    pitch: 30,
+                    bearing: 0,
+                    layers: [
+                        "railway",
+                        "maus-polygons",
+                        "copper-tracts",
+                        "copper-tracts-outline",
+                        "cities-labels",
+                    ],
+                },
+                ownership: {
+                    center: [26.8, -11.5],
+                    zoom: 7,
+                    pitch: 20,
+                    bearing: 0,
+                    layers: [
+                        "railway",
+                        "facilities-chinese",
+                        "facilities-western",
+                        "facilities-state",
+                        "cities-labels",
+                    ],
+                },
+                "china-detail": {
+                    center: [26.5, -10.8],
+                    zoom: 8,
+                    pitch: 35,
+                    bearing: 10,
+                    layers: [
+                        "railway",
+                        "facilities-chinese",
+                        "facilities-chinese-labels",
+                        "cities-labels",
+                    ],
+                },
+                "supply-chain": {
+                    center: [20.0, -11.5],
+                    zoom: 5.2,
+                    pitch: 20,
+                    bearing: 0,
+                    layers: ["railway", "cities-labels"],
+                },
+                "europe-arcs": {
+                    center: [8, 20],
+                    zoom: 2.8,
+                    pitch: 0,
+                    bearing: 0,
+                    layers: [
+                        "railway",
+                        "supply-sea",
+                        "europe-dots",
+                        "europe-labels",
+                        "cities-labels",
+                    ],
+                },
+                denmark: {
+                    center: [12.5, 55.5],
+                    zoom: 5.5,
+                    pitch: 30,
+                    bearing: 0,
+                    layers: ["supply-sea", "europe-dots", "europe-labels"],
+                },
+                "eu-policy": {
+                    center: [10, 35],
+                    zoom: 3.2,
+                    pitch: 0,
+                    bearing: 0,
+                    layers: [
+                        "railway",
+                        "supply-sea",
+                        "europe-dots",
+                        "europe-labels",
+                        "facilities-chinese",
+                        "facilities-western",
+                    ],
+                },
+                final: {
+                    center: [15, 10],
+                    zoom: 2.5,
+                    pitch: 30,
+                    bearing: -10,
+                    layers: [
+                        "railway",
+                        "supply-sea",
+                        "maus-polygons",
+                        "facilities-chinese",
+                        "facilities-western",
+                        "europe-dots",
+                        "europe-labels",
+                        "cities-labels",
+                    ],
+                },
+            };
+
+            const ALL_TOGGLE_LAYERS = [
+                "railway",
+                "maus-polygons",
+                "copper-tracts",
+                "copper-tracts-outline",
+                "facilities-chinese",
+                "facilities-western",
+                "facilities-state",
+                "facilities-chinese-labels",
+                "countries-fill",
+                "countries-outline",
+                "cities-labels",
+                "supply-sea",
+                "europe-dots",
+                "europe-labels",
+            ];
+
+            const map = new maplibregl.Map({
+                container: "map",
+                style: {
+                    version: 8,
+                    glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
+                    sources: {
+                        "carto-dark": {
+                            type: "raster",
+                            tiles: [
+                                "https://basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}@2x.png",
+                            ],
+                            tileSize: 256,
+                            attribution: "&copy; CARTO &copy; OpenStreetMap",
+                        },
+                    },
+                    layers: [
+                        {
+                            id: "carto-dark",
+                            type: "raster",
+                            source: "carto-dark",
+                        },
+                    ],
+                },
+                center: [18, -10],
+                zoom: 4.2,
+                pitch: 0,
+                bearing: 0,
+                interactive: false,
+            });
+
+            map.scrollZoom.disable();
+            map.dragPan.enable();
+            map.dragRotate.enable();
+
+            map.on("load", async () => {
+                console.log("Loading GeoJSON data...");
+                let corridorLine,
+                    railway,
+                    facilities,
+                    copperTracts,
+                    maus,
+                    cities,
+                    countries,
+                    supplyChains,
+                    europeDests;
+                try {
+                    [
+                        corridorLine,
+                        railway,
+                        facilities,
+                        copperTracts,
+                        maus,
+                        cities,
+                        countries,
+                        supplyChains,
+                        europeDests,
+                    ] = await Promise.all([
+                        fetch("data/corridor_line.geojson").then((r) => {
+                            if (!r.ok)
+                                throw new Error("corridor_line: " + r.status);
+                            return r.json();
+                        }),
+                        fetch("data/railway.geojson").then((r) => {
+                            if (!r.ok) throw new Error("railway: " + r.status);
+                            return r.json();
+                        }),
+                        fetch("data/facilities_ownership.geojson").then((r) => {
+                            if (!r.ok)
+                                throw new Error("facilities: " + r.status);
+                            return r.json();
+                        }),
+                        fetch("data/copper_tracts.geojson").then((r) => {
+                            if (!r.ok)
+                                throw new Error("copper_tracts: " + r.status);
+                            return r.json();
+                        }),
+                        fetch("data/maus_polygons.geojson").then((r) => {
+                            if (!r.ok) throw new Error("maus: " + r.status);
+                            return r.json();
+                        }),
+                        fetch("data/cities.geojson").then((r) => {
+                            if (!r.ok) throw new Error("cities: " + r.status);
+                            return r.json();
+                        }),
+                        fetch("data/countries.geojson").then((r) => {
+                            if (!r.ok)
+                                throw new Error("countries: " + r.status);
+                            return r.json();
+                        }),
+                        fetch("data/supply_chains.geojson").then((r) => {
+                            if (!r.ok)
+                                throw new Error("supply_chains: " + r.status);
+                            return r.json();
+                        }),
+                        fetch("data/european_destinations.geojson").then(
+                            (r) => {
+                                if (!r.ok)
+                                    throw new Error(
+                                        "european_destinations: " + r.status,
+                                    );
+                                return r.json();
+                            },
+                        ),
+                    ]);
+                    console.log("All data loaded successfully");
+                } catch (err) {
+                    console.error("Failed to load data:", err);
+                    document.getElementById("hero").innerHTML +=
+                        '<p style="color:red;margin-top:20px;">Data load error: ' +
+                        err.message +
+                        "</p>";
+                    return;
+                }
+
+                // Split facilities and supply chain legs
+                const chineseFac = {
+                    ...facilities,
+                    features: facilities.features.filter(
+                        (f) => f.properties.ownership === "Chinese",
+                    ),
+                };
+                const westernFac = {
+                    ...facilities,
+                    features: facilities.features.filter(
+                        (f) => f.properties.ownership === "Western",
+                    ),
+                };
+                const stateFac = {
+                    ...facilities,
+                    features: facilities.features.filter(
+                        (f) => f.properties.ownership === "State-owned",
+                    ),
+                };
+                const supplySea = {
+                    ...supplyChains,
+                    features: supplyChains.features.filter(
+                        (f) => f.properties.leg === "sea",
+                    ),
+                };
+
+                // Add all sources
+                map.addSource("railway", { type: "geojson", data: railway });
+                map.addSource("facilities-chinese", {
+                    type: "geojson",
+                    data: chineseFac,
+                });
+                map.addSource("facilities-western", {
+                    type: "geojson",
+                    data: westernFac,
+                });
+                map.addSource("facilities-state", {
+                    type: "geojson",
+                    data: stateFac,
+                });
+                map.addSource("copper-tracts", {
+                    type: "geojson",
+                    data: copperTracts,
+                });
+                map.addSource("maus-polygons", { type: "geojson", data: maus });
+                map.addSource("cities", { type: "geojson", data: cities });
+                map.addSource("countries", {
+                    type: "geojson",
+                    data: countries,
+                });
+                map.addSource("supply-sea", {
+                    type: "geojson",
+                    data: supplySea,
+                });
+                map.addSource("europe-dests", {
+                    type: "geojson",
+                    data: europeDests,
+                });
+
+                // ── Layers ──
+
+                map.addLayer({
+                    id: "countries-fill",
+                    type: "fill",
+                    source: "countries",
+                    paint: { "fill-color": "#1a1a2e", "fill-opacity": 0.3 },
+                    layout: { visibility: "none" },
+                });
+                map.addLayer({
+                    id: "countries-outline",
+                    type: "line",
+                    source: "countries",
+                    paint: { "line-color": "#333", "line-width": 1 },
+                    layout: { visibility: "none" },
+                });
+
+                map.addLayer({
+                    id: "copper-tracts",
+                    type: "fill",
+                    source: "copper-tracts",
+                    paint: { "fill-color": "#e63946", "fill-opacity": 0.15 },
+                    layout: { visibility: "none" },
+                });
+                map.addLayer({
+                    id: "copper-tracts-outline",
+                    type: "line",
+                    source: "copper-tracts",
+                    paint: {
+                        "line-color": "#e63946",
+                        "line-width": 1.5,
+                        "line-dasharray": [4, 3],
+                    },
+                    layout: { visibility: "none" },
+                });
+
+                map.addLayer({
+                    id: "maus-polygons",
+                    type: "fill",
+                    source: "maus-polygons",
+                    paint: { "fill-color": "#a855f7", "fill-opacity": 0.5 },
+                    layout: { visibility: "none" },
+                });
+
+                // Supply chain: sea legs (animated teal)
+                map.addLayer({
+                    id: "supply-sea",
+                    type: "line",
+                    source: "supply-sea",
+                    paint: {
+                        "line-color": "#2a9d8f",
+                        "line-width": 2,
+                        "line-opacity": 0.7,
+                        "line-dasharray": [3, 2],
+                    },
+                    layout: { visibility: "none" },
+                });
+
+                // European destination dots
+                map.addLayer({
+                    id: "europe-dots",
+                    type: "circle",
+                    source: "europe-dests",
+                    paint: {
+                        "circle-radius": 7,
+                        "circle-color": "#2a9d8f",
+                        "circle-stroke-width": 2,
+                        "circle-stroke-color": "#fff",
+                        "circle-opacity": 0.95,
+                    },
+                    layout: { visibility: "none" },
+                });
+
+                // European destination labels
+                map.addLayer({
+                    id: "europe-labels",
+                    type: "symbol",
+                    source: "europe-dests",
+                    layout: {
+                        "text-field": ["get", "name"],
+                        "text-size": 12,
+                        "text-offset": [0, 1.8],
+                        "text-anchor": "top",
+                        "text-allow-overlap": true,
+                        visibility: "none",
+                    },
+                    paint: {
+                        "text-color": "#2a9d8f",
+                        "text-halo-color": "#000",
+                        "text-halo-width": 1.5,
+                    },
+                });
+
+                // Supply chain: rail leg (solid orange)
+                map.addLayer({
+                    id: "railway",
+                    type: "line",
+                    source: "railway",
+                    paint: {
+                        "line-color": "#ff8c00",
+                        "line-width": 2.5,
+                        "line-opacity": 0.7,
+                    },
+                    layout: { visibility: "none" },
+                });
+
+                map.addLayer({
+                    id: "facilities-chinese",
+                    type: "circle",
+                    source: "facilities-chinese",
+                    paint: {
+                        "circle-radius": 6,
+                        "circle-color": "#e63946",
+                        "circle-stroke-width": 1.5,
+                        "circle-stroke-color": "#fff",
+                        "circle-opacity": 0.9,
+                    },
+                    layout: { visibility: "none" },
+                });
+                map.addLayer({
+                    id: "facilities-chinese-labels",
+                    type: "symbol",
+                    source: "facilities-chinese",
+                    layout: {
+                        "text-field": ["get", "FeatureNam"],
+                        "text-size": 11,
+                        "text-offset": [0, 1.5],
+                        "text-anchor": "top",
+                        visibility: "none",
+                    },
+                    paint: {
+                        "text-color": "#e63946",
+                        "text-halo-color": "#000",
+                        "text-halo-width": 1.5,
+                    },
+                });
+                map.addLayer({
+                    id: "facilities-western",
+                    type: "circle",
+                    source: "facilities-western",
+                    paint: {
+                        "circle-radius": 6,
+                        "circle-color": "#457b9d",
+                        "circle-stroke-width": 1.5,
+                        "circle-stroke-color": "#fff",
+                        "circle-opacity": 0.9,
+                    },
+                    layout: { visibility: "none" },
+                });
+                map.addLayer({
+                    id: "facilities-state",
+                    type: "circle",
+                    source: "facilities-state",
+                    paint: {
+                        "circle-radius": 5,
+                        "circle-color": "#e9c46a",
+                        "circle-stroke-width": 1,
+                        "circle-stroke-color": "#fff",
+                        "circle-opacity": 0.9,
+                    },
+                    layout: { visibility: "none" },
+                });
+
+                map.addLayer({
+                    id: "cities-labels",
+                    type: "symbol",
+                    source: "cities",
+                    layout: {
+                        "text-field": ["get", "name"],
+                        "text-size": [
+                            "interpolate",
+                            ["linear"],
+                            ["get", "pop_max"],
+                            10000,
+                            10,
+                            100000,
+                            12,
+                            500000,
+                            14,
+                            1000000,
+                            16,
+                        ],
+                        "text-anchor": "center",
+                        "text-allow-overlap": false,
+                        "text-padding": 4,
+                        visibility: "none",
+                    },
+                    paint: {
+                        "text-color": "#ccc",
+                        "text-halo-color": "#000",
+                        "text-halo-width": 1.5,
+                    },
+                });
+
+                // Show initial state
+                map.setLayoutProperty("railway", "visibility", "visible");
+                map.setLayoutProperty("cities-labels", "visibility", "visible");
+
+                setTimeout(() => {
+                    map.flyTo({
+                        center: [20.5, -11.8],
+                        zoom: 4.8,
+                        pitch: 20,
+                        bearing: 0,
+                        duration: 3000,
+                    });
+                }, 500);
+
+                // ── Scrollama ──
+                const scroller = scrollama();
+                scroller
+                    .setup({ step: ".step", offset: 0.5, progress: false })
+                    .onStepEnter(({ element }) => {
+                        const chapterId = element.dataset.chapter;
+                        const chapter = CHAPTERS[chapterId];
+                        if (!chapter) return;
+
+                        element.classList.add("is-active");
+
+                        map.flyTo({
+                            center: chapter.center,
+                            zoom: chapter.zoom,
+                            pitch: chapter.pitch || 0,
+                            bearing: chapter.bearing || 0,
+                            duration: 2000,
+                            essential: true,
+                        });
+
+                        ALL_TOGGLE_LAYERS.forEach((id) => {
+                            if (map.getLayer(id)) {
+                                map.setLayoutProperty(
+                                    id,
+                                    "visibility",
+                                    chapter.layers.includes(id)
+                                        ? "visible"
+                                        : "none",
+                                );
+                            }
+                        });
+                    })
+                    .onStepExit(({ element }) => {
+                        element.classList.remove("is-active");
+                    });
+
+                window.addEventListener("resize", scroller.resize);
+            });
+        </script>
+    </body>
+</html>
