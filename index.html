@@ -137,12 +137,12 @@
 
             #map {
                 position: fixed;
-                top: 25px;
-                left: 10rem;
-                width: calc(100vw - 20rem);
-                height: calc(100vh - 50px);
+                top: 0;
+                left: 9vw;
+                width: calc(100vw - 18vw);
+                height: calc(100vh);
                 z-index: 0;
-                border-radius: 4px;
+                border-radius: .1rem;
             }
 
             .sat-fullscreen {
@@ -169,8 +169,8 @@
             #text-box {
                 position: fixed;
                 top: 5vh;
-                left: 20vh;
-                width: 460px;
+                left: 11vw;
+                width: 30vw;
                 height: 40vh;
                 overflow-y: auto;
                 z-index: 10;
@@ -194,10 +194,10 @@
 
             #chapter-title {
                 position: fixed;
-                bottom: 50px;
-                left: 20vh;
+                bottom: 5vh;
+                left: 11vw;
                 z-index: 10;
-                font-size: 2.6rem;
+                font-size: 1.5vw;
                 font-family: "barlow semi condensed", sans-serif;
                 font-weight: 500;
                 color: #e63946;
@@ -212,7 +212,7 @@
                 visibility: visible;
             }
             #text-box p {
-                font-size: 15px;
+                font-size: .9vw;
                 line-height: 1.65;
                 color: #333;
                 margin-bottom: 10px;
@@ -441,8 +441,8 @@
                     <h2>Jernbanens historie</h2>
                     <p>
                         Da Angola blev selvst&aelig;ndigt fra Portugal i
-                        <strong>1975</strong>, br&oslash;d en brutal borgerkrig
-                        ud, der varede helt til <strong>2002</strong>.
+                        1975, br&oslash;d en brutal borgerkrig
+                        ud, der varede helt til 2002.
                     </p>
                     <p>
                         Benguela-jernbanen blev et strategisk m&aring;l og blev
@@ -602,14 +602,13 @@
                 <div class="step-inner">
                     <h2>Fra Silicon Valley til kobberb&aelig;ltet</h2>
                     <p>
-                        Hvis vi vender tilbage til Kolwezi, byen der siden 2015 allerede har oplevet tvangsflytninger, viser en unders&oslash;gelse fra Global Witness (december 2025), at jernbanens opgradering truer endnu tusindvis af beboere langs sporet.
-                    </p>
+                        Hvis vi vender tilbage til Kolwezi, byen der siden 2015 allerede har oplevet tvangsflytninger, viser en unders&oslash;gelse fra Global Witness, at vestens initiativer truer endnu tusindvis af beboere langs sporet. 
                     <p>
                         I kvarteret <span class="gold">Bel Air</span> i Kolwezi l&oslash;ber jernbanen midt igennem et t&aelig;tbefolket omr&aring;de. B&oslash;rn leger p&aring; skinnerne. Familier krydser sporet dagligt. Men siden 2024 er de f&oslash;rste tog fra <em>Lobito Atlantic Railway</em> begyndt at k&oslash;re.
+                        Op til <span class="gold">6.500</span> mennesker kan v&aelig;re i risiko for tvangsflytning som f&oslash;lge af Lobito-Korridorens genopbygning. 
+    
                     </p>
-                    <p>
-                        Op til <span class="gold">6.500</span> mennesker kan v&aelig;re i risiko for tvangsflytning som f&oslash;lge af jernbanens genopbygning langs str&aelig;kningen fra Kolwezi til den angolske gr&aelig;nse.
-                    </p>
+
                 </div>
             </div>
 
@@ -624,7 +623,7 @@
                         I stedet g&aelig;lder ekspropriationsloven, som kun kr&aelig;ver &oslash;konomisk kompensation. Beboere fortæller, at selv den er udeblevet, da staten fjernede folk for at rydde plads til en ny vej.
                     </p>
                     <p>
-                        Global Witness kalder projektet en <em>lakmuspr&oslash;ve</em>: Vil vestlige investorer mene det alvorligt, n&aring;r de lover Afrika en mere retf&aelig;rdig model for ressourceudvinding?
+                     Hvor alvorligt mener vestlige investorer det, n&aring;r de lover Afrika en mere retf&aelig;rdig model for ressourceudvinding?
                     </p>
                     <p style="font-size:12px;color:#ff0000;margin-top:12px;">
                         Kilde: <a href="https://globalwitness.org/en/campaigns/transition-minerals/thousands-in-drc-could-face-eviction-from-lobito-corridor-railway/" target="_blank" style="color:#457b9d;pointer-events:auto;">Global Witness, december 2025</a>
@@ -737,11 +736,11 @@
                 },
                 kolwezi: {
                     center:[25.4265,-10.7155], zoom:12, pitch:25, bearing:-5,
-                    layers:["corridor-full","maus-polygons","cities-labels"]
+                    layers:["corridor-full","facilities-chinese","facilities-chinese-labels","maus-polygons","cities-labels"]
                 },
                 kolwezimine: {
                     center:[25.4265,-10.6855], zoom:15.5, pitch:0, bearing:0,
-                    layers:[]
+                    layers:["corridor-full","maus-polygons","facilities-chinese","facilities-chinese-labels","facilities-western","facilities-western-labels","cities-labels"]
                 },
                 western: {
                     center:[27.5,-12.0], zoom:7, pitch:30, bearing:0,
@@ -928,9 +927,21 @@
                 },500);
 
                 /* Scrollama */
+                const textBoxWrapper = document.getElementById("text-box");
                 const textBox = document.getElementById("text-box-content");
                 const chapterTitle = document.getElementById("chapter-title");
                 let currentChapterId = null;
+
+                function showFixedUi() {
+                    textBoxWrapper.classList.add("show");
+                    chapterTitle.classList.add("show");
+                }
+
+                function hideFixedUi() {
+                    textBoxWrapper.classList.remove("show");
+                    chapterTitle.classList.remove("show");
+                    currentChapterId = null;
+                }
 
                 function swapText(html) {
                     const tmp = document.createElement("div");
@@ -938,10 +949,9 @@
                     const h2 = tmp.querySelector("h2");
                     if(h2) {
                         chapterTitle.textContent = h2.textContent;
-                        chapterTitle.classList.add("show");
                         h2.remove();
                     }
-                    document.getElementById("text-box").classList.add("show");
+                    showFixedUi();
                     textBox.classList.add("fading");
                     setTimeout(() => {
                         textBox.innerHTML = tmp.innerHTML;
@@ -1053,6 +1063,11 @@
                             map.setPaintProperty("extension-line","line-color","#e63946");
                             map.setPaintProperty("extension-line","line-opacity",0.2);
                             map.setPaintProperty("extension-line","line-dasharray",[1,0]);
+                        }
+                    })
+                    .onStepExit(({ element, direction }) => {
+                        if(direction === "up" && element === document.querySelector(".step")) {
+                            hideFixedUi();
                         }
                     });
                 window.addEventListener("resize",scroller.resize);
