@@ -1,9 +1,9 @@
 <!doctype html>
-<html lang="en">
+<html lang="da">
     <head>
         <meta charset="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <title>Lobito-korridoren: Kampen om Afrikas kritiske mineraler</title>
+        <title>Lobito-korridoren</title>
 
         <!-- MapLibre GL -->
         <link
@@ -21,6 +21,13 @@
             href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"
             rel="stylesheet"
         />
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+        
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,200..900;1,8..60,200..900&display=swap" rel="stylesheet">
 
         <style>
             *,
@@ -33,22 +40,222 @@
 
             body {
                 font-family:
-                    "Inter",
-                    -apple-system,
-                    sans-serif;
-                background: #0a0a0a;
-                color: #e8e8e8;
+                    "source serif 4",
+                    serif;
+                background: #ffffff;
+                color: #151515;
                 overflow-x: hidden;
+            }
+
+            .source-serif-4-light {
+            font-family: "Source Serif 4", serif;
+            font-weight: 300;
+            font-style: normal;
+            }
+
+            .source-serif-4-regular {
+            font-family: "Source Serif 4", serif;
+            font-weight: 400;
+            font-style: normal;
+            }
+
+            .source-serif-4-medium {
+            font-family: "Source Serif 4", serif;
+            }
+
+            .barlow-semi-condensed-regular {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 400;
+            font-style: normal;
+            }
+
+            .barlow-semi-condensed-medium {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 500;
+            font-style: normal;
+            }
+
+            .barlow-semi-condensed-semibold {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 600;
+            font-style: normal;
+            }
+
+            .barlow-semi-condensed-bold {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 700;
+            font-style: normal;
+            }
+
+            .barlow-semi-condensed-extrabold {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 800;
+            font-style: normal;
+            }
+
+            .barlow-semi-condensed-black {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 900;
+            font-style: normal;
+            }
+
+            .barlow-semi-condensed-thin-italic {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 100;
+            font-style: italic;
+            }
+
+            .barlow-semi-condensed-extralight-italic {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 200;
+            font-style: italic;
+            }
+
+            .barlow-semi-condensed-light-italic {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 300;
+            font-style: italic;
+            }
+
+            .barlow-semi-condensed-regular-italic {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 400;
+            font-style: italic;
+            }
+
+            .barlow-semi-condensed-medium-italic {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 500;
+            font-style: italic;
+            }
+
+            .barlow-semi-condensed-semibold-italic {
+            font-family: "Barlow Semi Condensed", sans-serif;
+            font-weight: 600;
+            font-style: italic;
             }
 
             #map {
                 position: fixed;
-                top: 0;
-                left: 0;
-                width: 100vw;
-                height: 100vh;
+                top: 25px;
+                left: 10rem;
+                width: calc(100vw - 20rem);
+                height: calc(100vh - 50px);
                 z-index: 0;
+                border-radius: 4px;
+            }
+
+            .sat-fullscreen {
+                position: fixed;
+                top: 25px;
+                left: 10rem;
+                width: calc(100vw - 20rem);
+                height: calc(100vh - 50px);
+                z-index: 1;
+                object-fit: cover;
+                border-radius: 4px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.12s ease, visibility 0.12s ease;
                 pointer-events: none;
+                filter: grayscale(1);
+            }
+            .sat-fullscreen.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            /* ── Fixed text box ── */
+            #text-box {
+                position: fixed;
+                top: 5vh;
+                left: 20vh;
+                width: 460px;
+                height: 40vh;
+                overflow-y: auto;
+                z-index: 10;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+                padding: 40px 32px;
+                pointer-events: auto;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
+            }
+            #text-box.show {
+                opacity: 1;
+                visibility: visible;
+            }
+
+            #text-box h2 {
+                display: none;
+            }
+
+            #chapter-title {
+                position: fixed;
+                bottom: 50px;
+                left: 20vh;
+                z-index: 10;
+                font-size: 2.6rem;
+                font-family: "barlow semi condensed", sans-serif;
+                font-weight: 500;
+                color: #e63946;
+                text-transform: uppercase;
+                letter-spacing: 2px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
+            }
+            #chapter-title.show {
+                opacity: 1;
+                visibility: visible;
+            }
+            #text-box p {
+                font-size: 15px;
+                line-height: 1.65;
+                color: #333;
+                margin-bottom: 10px;
+            }
+            #text-box p:last-child {
+                margin-bottom: 0;
+            }
+            #text-box .stat {
+                font-size: 36px;
+                font-weight: 900;
+                color: #111;
+                display: block;
+                margin: 8px 0;
+            }
+            #text-box .label {
+                font-size: 12px;
+                text-transform: uppercase;
+                letter-spacing: 1.5px;
+                color: #e63946;
+                margin-bottom: 6px;
+            }
+            #text-box .accent { color: inherit; border: 1.5px solid #ff6b35; padding: 1px 5px; }
+            #text-box .china { color: inherit; border: 1.5px solid #e63946; padding: 1px 5px; }
+            #text-box .western { color: inherit; border: 1.5px solid #457b9d; padding: 1px 5px; }
+            #text-box .gold { color: inherit; border: 1.5px solid #f1c40f; padding: 1px 5px; }
+            .sat-compare { display: flex; gap: 8px; margin: 14px 0 6px; }
+            .sat-compare figure { flex: 1; margin: 0; overflow: hidden; }
+            .sat-compare img { width: 125%; margin-left: -12.5%; border-radius: 3px; display: block; }
+            .sat-compare figcaption { font-size: 11px; text-align: center; color: #666; margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+            #text-box blockquote {
+                border-left: 3px solid #457b9d;
+                padding-left: 16px;
+                margin: 16px 0;
+                font-style: italic;
+                color: #333;
+                line-height: 1.6;
+                font-size: 15px;
+            }
+            #text-box .attribution {
+                font-size: 13px;
+                color: #df0000;
+                margin-top: 8px;
+                font-style: normal;
             }
 
             #scrolly {
@@ -56,93 +263,17 @@
                 z-index: 1;
             }
 
+            html {
+                scroll-snap-type: y mandatory;
+            }
+
             .step {
-                pointer-events: auto;
-                max-width: 420px;
-                margin: 0 0 0 40px;
-                padding: 45vh 20px;
-                opacity: 0.12;
-                transition: opacity 0.4s ease;
+                pointer-events: none;
+                min-height: 100vh;
+                scroll-snap-align: start;
             }
-            .step:first-child {
-                padding-top: 70vh;
-            }
-            .step:last-child {
-                padding-bottom: 70vh;
-            }
-            .step.is-active {
-                opacity: 1;
-            }
-
             .step-inner {
-                background: rgba(10, 10, 10, 0.88);
-                backdrop-filter: blur(12px);
-                -webkit-backdrop-filter: blur(12px);
-                border: 1px solid rgba(255, 255, 255, 0.08);
-                border-radius: 12px;
-                padding: 28px 26px;
-                box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
-            }
-            .step-inner h2 {
-                font-size: 22px;
-                font-weight: 700;
-                margin-bottom: 12px;
-                line-height: 1.25;
-            }
-            .step-inner p {
-                font-size: 15px;
-                line-height: 1.65;
-                color: #b8b8b8;
-                margin-bottom: 10px;
-            }
-            .step-inner p:last-child {
-                margin-bottom: 0;
-            }
-            .step-inner .stat {
-                font-size: 36px;
-                font-weight: 900;
-                color: #fff;
-                display: block;
-                margin: 8px 0;
-            }
-            .step-inner .label {
-                font-size: 12px;
-                text-transform: uppercase;
-                letter-spacing: 1.5px;
-                color: #666;
-                margin-bottom: 6px;
-            }
-            .step-inner .accent {
-                color: #ff6b35;
-            }
-            .step-inner .china {
-                color: #e63946;
-            }
-            .step-inner .western {
-                color: #457b9d;
-            }
-            .step-inner .state {
-                color: #e9c46a;
-            }
-            .step-inner .eu {
-                color: #2a9d8f;
-            }
-            .step-inner .dk {
-                color: #c8102e;
-            }
-
-            .step-inner .legend-row {
-                display: flex;
-                align-items: center;
-                gap: 8px;
-                margin: 4px 0;
-                font-size: 14px;
-            }
-            .legend-dot {
-                width: 10px;
-                height: 10px;
-                border-radius: 50%;
-                flex-shrink: 0;
+                display: none;
             }
 
             #hero {
@@ -151,29 +282,38 @@
                 height: 100vh;
                 display: flex;
                 flex-direction: column;
-                justify-content: flex-end;
-                padding: 0 24px 80px;
+                justify-content: center;
+                align-items: center;
+                text-align: center;
+                padding: 5vh 4vw;
                 pointer-events: none;
+                scroll-snap-align: start;
             }
             #hero h1 {
-                font-size: clamp(32px, 6vw, 56px);
-                font-weight: 900;
-                line-height: 1.1;
-                max-width: 700px;
+                font-size: 6rem;
+                font-family: 'Barlow Semi Condensed', sans-serif;
+                font-weight: 700;
+                line-height: 1.05;
+                max-width: 80vw;
             }
             #hero .subtitle {
-                font-size: 17px;
-                color: #999;
-                margin-top: 14px;
-                max-width: 550px;
+                font-size: 2vh;
+                padding-bottom: 50vh;
+                color: #000000;
+                margin-top: 24px;
+                max-width: 55vw;
                 line-height: 1.5;
             }
             #hero .scroll-hint {
-                margin-top: 30px;
-                font-size: 13px;
-                color: #555;
+                margin-top: 32px;
+                margin-bottom: 0;
+                font-size: 1.5vh;
+                color: #e63946;
                 letter-spacing: 1px;
                 text-transform: uppercase;
+                border: 1.5px solid #e63946;
+                padding: 0.8vh 7vw;
+                display: inline-block;
                 animation: pulse 2s ease-in-out infinite;
             }
             @keyframes pulse {
@@ -199,8 +339,7 @@
                 pointer-events: auto;
             }
             #outro h2 {
-                font-size: 32px;
-                font-weight: 700;
+                font-size: 3rem;
                 max-width: 600px;
                 margin-bottom: 20px;
             }
@@ -221,292 +360,288 @@
 
     <body>
         <div id="hero">
-            <h1>Lobito-korridoren: Kampen om Afrikas kritiske mineraler</h1>
+            <h1>Lobito-korridoren</h1>
             <p class="subtitle">
-                En jernbane fra Atlanterhavet til kobberbeltet. Kinesiske og
-                vestlige selskaber kappes om de mineraler, der driver den gronne
-                omstilling — og ender i din elbil.
+              Jernbanen, der er et af de største vestlige infrastrukturprojekter i Afrika i nyere tid, og en del af en større plan om at sikre vestens adgang til kritiske ressourcer. Denne artikel følger jernbanens rute fra Atlanterhavet ind i hjertet af kobberbæltet, og stiller spørgsmålet om, hvem der i sidste ende kommer til at få mest fordel af den.        
             </p>
-            <div class="scroll-hint">Scroll ned for at udforske &#x2193;</div>
+            <div class="scroll-hint">Scroll ned for at læse artiklen &#x2193;</div>
         </div>
 
         <div id="map"></div>
 
+        <img id="sat-2015" class="sat-fullscreen" src="data/Screenshot%202026-03-26%20at%2000.06.28.png" alt="Kolwezi 2025">
+        <img id="sat-2025" class="sat-fullscreen" src="data/Screenshot%202026-03-26%20at%2000.06.05.png" alt="Kolwezi 2015">
+
+        <div id="text-box"><div id="text-box-content"></div></div>
+        <div id="chapter-title"></div>
+
         <div id="scrolly">
-            <div class="step" data-chapter="lobito">
+            <!-- KAPITEL 1: Introduktion -->
+            <div class="step" data-chapter="intro">
                 <div class="step-inner">
-                    <div class="label">Kapitel 1</div>
-                    <h2>Lobito: Porten til Afrika</h2>
+                    <h2>Lobito-Korridoren</h2>
                     <p>
-                        Lobito-havnen pa Angolas atlanterhavskyst er
-                        startpunktet for en jernbanelinje, der strækker sig
-                        1.300 km ind i hjertet af det centralafrikanske
-                        kobberbælte.
+                         USA og EU har tilsammen mobiliseret over 10 milliarder dollars til at genopbygge en 1.344 km lang jernbane fra Angolas atlanterhavshavn til kobber- og koboltminerne i Congo og Zambia. 
                     </p>
                     <p>
-                        Korridoren er et nogleelement i
-                        <span class="accent">EU's og USA's strategi</span> for
-                        at bryde Kinas dominans over forsyningskæden for
-                        kritiske mineraler.
+                        Den bl&aring; linje p&aring; kortet viser jernbanestr&aelig;kningen, der nu kaldes
+                        <span class="western">Lobito-korridoren</span> 
+                    </p>
+                    <p>
+                        Officielt handler projektet særligt om afrikansk udvikling og grøn omstilling. Men bag investeringerne ligger også en geopolitisk kamp om adgangen til de mineraler, vesten skal bruge til elbiler, batterier og mikrochips.
+                    </p>
+
+                </div>
+            </div>
+
+            <!-- KAPITEL 2: Mineraler -->
+            <div class="step" data-chapter="minerals">
+                <div class="step-inner">
+                    <h2>Kobberb&aelig;ltet: Verdens batterikammer</h2>
+                    <p>
+                        I gr&aelig;nseomr&aring;det mellem DR Congo og Zambia
+                        ligger nemlig et af verdens mest mineralrige omr&aring;der.
+                        Her findes enorme forekomster af
+                        <span class="accent">kobber</span>, <span class="accent">kobolt</span> og
+                        andre kritiske r&aring;stoffer.
+                    </p>
+                    <p>
+                        Med den globale teknologiboom og den gr&oslash;nne
+                        omstilling er eftersp&oslash;rgslen eksploderet. Kobolt
+                        bruges i smartphones og elbiler, kobber i alt fra
+                        chips til vindm&oslash;ller.
                     </p>
                 </div>
             </div>
 
-            <div class="step" data-chapter="railway">
+            <!-- KAPITEL 3: Benguela-jernbanen -->
+            <div class="step" data-chapter="benguela">
                 <div class="step-inner">
-                    <div class="label">Kapitel 2</div>
-                    <h2>Benguela-jernbanen</h2>
+                    <h2>Jernbanens historie</h2>
                     <p>
-                        Jernbanen blev oprindeligt bygget i kolonitiden for at
-                        fragte mineraler fra det indre af kontinentet til
-                        kysten. Efter artier med borgerkrig blev den genopbygget
-                        med <span class="china">kinesisk finansiering</span> i
-                        2014.
+                        Korridorens historie begynder med
+                        <span class="accent">Benguela-jernbanen</span>. Den
+                        blev bygget mellem 1903 og 1929 under ledelse af den
+                        britiske entrepren&oslash;r Robert Williams for at fragte
+                        kobber fra Katanga-regionen i Congo ud til
+                        atlanterhavskysten.
                     </p>
                     <p>
-                        Nu er den genstand for fornyet vestlig interesse som et
-                        alternativ til Kinas Bælte- og Vejinitiativ.
+                        Str&aelig;kningen herfra til
+                        <span class="accent">Tenke Fungurume</span> i Congo var den
+                        originale bane. En direkte &aring;re mellem
+                        mineralrigdommen og verdensmarkedet.
                     </p>
                 </div>
             </div>
 
-            <div class="step" data-chapter="copperbelt">
+            <!-- KAPITEL 3.1: Borgerkrig -->
+            <div class="step" data-chapter="civil-war">
                 <div class="step-inner">
-                    <div class="label">Kapitel 3</div>
-                    <h2>Kobberbeltet</h2>
+                    <h2>Jernbanens historie</h2>
                     <p>
-                        I grænseomradet mellem DR Congo og Zambia ligger et af
-                        verdens rigeste mineralomrader. Geologien — Katanga
-                        Supergroup — indeholder enorme forekomster af kobber og
-                        kobolt.
+                        Da Angola blev selvst&aelig;ndigt fra Portugal i
+                        <strong>1975</strong>, br&oslash;d en brutal borgerkrig
+                        ud, der varede helt til <strong>2002</strong>.
                     </p>
-                    <span class="stat">287</span>
                     <p>
-                        mineomrader er identificeret fra satellit i korridoren
-                        alene.
+                        Benguela-jernbanen blev et strategisk m&aring;l og blev
+                        systematisk &oslash;delagt. I n&aelig;sten tre &aring;rtier
+                        l&aring; den &oslash;de &mdash; og forbindelsen til
+                        kobberb&aelig;ltet var afbrudt.
                     </p>
                 </div>
             </div>
 
-            <div class="step" data-chapter="geology">
+            <!-- KAPITEL 4: Kina -->
+            <div class="step" data-chapter="china">
                 <div class="step-inner">
-                    <div class="label">Kapitel 4</div>
-                    <h2>Geologien forst — jernbanen fulgte</h2>
+                    <h2>Kinas dominans</h2>
                     <p>
-                        De rode omrader viser USGS-kortlagte
-                        kobberressource-trakter. Minerne klynger sig sammen her,
-                        fordi geologien er ekstraordinært rig.
+                        Kina har l&aelig;nge forst&aring;et v&aelig;rdien af
+                        Afrikas mineraler. I 2014 genopbyggede
+                        China Railway Group hele Benguela-jernbanen. En
+                        investering p&aring; over $1,8 mia.
                     </p>
                     <p>
-                        Jernbanen blev bygget <em>til</em> mineralerne. Derefter
-                        tiltrak jernbanen flere miner. En selvforstærkende
-                        cyklus.
+                        Men det handlede ikke kun om infrastruktur. Kinesiske
+                        selskaber har systematisk opk&oslash;bt miner i
+                        regionen.
+                        <span class="china">China Molybdenum</span> ejer 80%
+                        af <span class="china">Tenke Fungurume</span> &mdash; verdens
+                        st&oslash;rste koboltmine.
+                    </p>
+                    <p>
+                        Her ser du de
+                        <span class="china">kinesisk-ejede</span> anl&aelig;g
+                        langs korridoren.
                     </p>
                 </div>
             </div>
 
-            <div class="step" data-chapter="ownership">
+            <!-- KAPITEL 4: Kolwezi -->
+            <div class="step" data-chapter="kolwezi">
                 <div class="step-inner">
-                    <div class="label">Kapitel 5</div>
-                    <h2>Hvem ejer hvad?</h2>
+                    <h2>Kolwezi, Zambia</h2>
                     <p>
-                        Ejerskabet over Afrikas mineraler er en geopolitisk
-                        slagmark.
+                        I Kolwezi bor 39.000 mennesker i et kvarter, der
+                        ligger direkte ovenp&aring; en kobolt- og kobbermine.
+                        Siden kinesiske <span class="china">Zijin Mining</span> gen&aring;bnede
+                        gruben i 2015, er hundredvis af familier blevet bedt
+                        om at forlade deres hjem.
+            
                     </p>
-                    <div class="legend-row">
-                        <div
-                            class="legend-dot"
-                            style="background: #e63946"
-                        ></div>
-                        <span
-                            ><strong class="china">Kinesisk</strong> — 21
-                            anlæg</span
-                        >
+                    <p>De lilla områder viser de miner nær byen, der kan ses med satellit.</p>
+                </div>
+            </div>
+
+            <!-- KAPITEL 4.1: Kolwezi (samlet med billede-toggle) -->
+            <div class="step" data-chapter="kolwezimine">
+                <div class="step-inner">
+                    <h2>Kolwezi, Zambia</h2>
+                    <p>
+                        Her ser du et sattelit billede af kvarteret i Kolwezi i 2015, da minen endnu ikke var genåbnet. Området består mest af beboelse og naturområder.
+                        Hvis du trykker på knappen nedenfor, kan du se, hvordan området så ud i 2025 efter flere års intensiv minedrift og udvidelse af gruben. En stor del af det eksisterende byområde er blevet opslugt af minen, mens der vest for minen er opstået nye beboelsesområder. 
+                    </p>
+                    <div style="margin: 18px 0 10px;">
+                        <button id="toggle-sat-btn" style="font-size:14px;padding:6px 18px;border-radius:4px;border:1.5px solid #888;background:#fff;cursor:pointer;">Vis 2025</button>
                     </div>
-                    <div class="legend-row">
-                        <div
-                            class="legend-dot"
-                            style="background: #457b9d"
-                        ></div>
-                        <span
-                            ><strong class="western">Vestligt</strong> — 50
-                            anlæg</span
-                        >
-                    </div>
-                    <div class="legend-row">
-                        <div
-                            class="legend-dot"
-                            style="background: #e9c46a"
-                        ></div>
-                        <span
-                            ><strong class="state">Statsejede</strong> — 11
-                            anlæg</span
-                        >
-                    </div>
-                    <p style="margin-top: 12px">
-                        Kina kontrollerer noglefaciliteter som
-                        <span class="china">Tenke Fungurume</span> (China
-                        Molybdenum, 80%) — verdens storste koboltmine.
+                    <p class="attribution">
+                        Satellit: Google Earth, 2015 & 2025. Kilde: Amnesty International
                     </p>
                 </div>
             </div>
 
-            <div class="step" data-chapter="china-detail">
+            <!-- KAPITEL 5: Vesten -->
+            <div class="step" data-chapter="western">
                 <div class="step-inner">
-                    <div class="label">Kapitel 6</div>
-                    <h2>Kinas greb om kobolten</h2>
+                    <h2>Fra Silicon Valley til kobberb&aelig;ltet</h2>
                     <p>
-                        DR Congo producerer
-                        <span class="stat" style="font-size: 28px">~70%</span>
-                        af verdens kobolt. Det meste kontrolleres af kinesiske
-                        selskaber:
+                        USA og EU har indset, at de er langt bagud. I
+                2023 annoncerede de sammen med Angola,
+                        Congo og Zambia
+                        <span class="western">Lobito-korridoren</span> &mdash;
+                        en massiv investering i at modernisere og forl&aelig;nge
+                        jernbanen helt ind i Zambia.
                     </p>
                     <p>
-                        <span class="china">China Molybdenum</span> — Tenke
-                        Fungurume<br />
-                        <span class="china">Zijin Mining</span> — Kolwezi
-                        (COMMUS)<br />
-                        <span class="china">CNMC / Jinchuan</span> — Ruashi,
-                        Chambishi<br />
-                        <span class="china">Sicomines</span> — Mashamba West
-                    </p>
-                    <p>Men hvor ender mineralerne?</p>
-                </div>
-            </div>
-
-            <div class="step" data-chapter="supply-chain">
-                <div class="step-inner">
-                    <div class="label">Kapitel 7</div>
-                    <h2>Forsyningskæden: Fra mine til havn</h2>
-                    <p>
-                        Mineralerne fragtes med jernbane fra kobberbeltet vestpa
-                        til <span class="accent">Lobito-havnen</span>. Herfra
-                        sejler de videre — primaert mod Europa og Kina.
+                        Form&aring;let er, at sikre vestlig adgang til de
+                        kritiske mineraler og bryde Kinas dominans over
+                        forsyningsk&aelig;den.
                     </p>
                     <p>
-                        Lobito-korridoren er den korteste rute fra det
-                        centralafrikanske kobberbælte til Atlanterhavet:
-                        <span class="stat" style="font-size: 24px"
-                            >1.300 km</span
-                        >
-                        versus tusindvis af kilometer via ostafrikanske havne.
+                        Her er de
+                        <span class="western">vestligt ejede</span> miner i
+                        omr&aring;det.
                     </p>
                 </div>
             </div>
 
-            <div class="step" data-chapter="europe-arcs">
+            <!-- KAPITEL 6: KoBold / AI -->
+            <div class="step" data-chapter="kobold">
                 <div class="step-inner">
-                    <div class="label">Kapitel 8</div>
-                    <h2>Kursen mod Europa</h2>
+
+                    <h2>Fra Silicon Valley til kobberb&aelig;ltet</h2>
                     <p>
-                        Fra Lobito sejler skibene mod europæiske raffinaderier
-                        og fabrikker. Kobolten og kobberet ender i:
+                        Et amerikans firma, der er særlig relevant for denne beslutning, er Silicon Valleys <span class="gold">KoBold Metals</span>. I 2024 annoncerede
+                        KoBold Metals er et
+                        AI-drevet mineralefterforskningsfirma, der ved
+                        hj&aelig;lp af maskinl&aelig;ring og satellitdata har
+                        fundet en af de st&oslash;rste uopdagede
+                        kobber-kobolt-forekomster i verden ved
+                        <span class="gold">Mingomba</span> i Zambia.
                     </p>
                     <p>
-                        <span class="eu">Umicore</span> (Bruxelles) — verdens
-                        storste kobolt-raffinaderi<br />
-                        <span class="eu">Aurubis</span> (Hamburg) — Europas
-                        storste kobber-smeltevaerk<br />
-                        <span class="eu">Northvolt</span> (Skelleftea) — Europas
-                        storste batterifabrik<br />
-                        <span class="eu">Tesla</span> (Berlin) — Gigafactory for
-                        Model Y
+                        <span class="gold">Manono</span> i det Congo, der også er ejet af KoBold, rummer
+                        samtidig en af verdens st&oslash;rste litiumreserver
+                        &mdash; afg&oslash;rende for fremtidens batterier. 
                     </p>
                 </div>
             </div>
 
-            <div class="step" data-chapter="denmark">
+            <!-- KAPITEL 7: Silicon Valley -->
+            <div class="step" data-chapter="silicon-valley">
                 <div class="step-inner">
-                    <div class="label">Kapitel 9</div>
-                    <h2>Den danske forbindelse</h2>
+   
+                    <h2>Fra Silicon Valley til kobberb&aelig;ltet</h2>
                     <p>
-                        Danmark er tættere forbundet med Lobito-korridoren end
-                        man tror:
-                    </p>
-                    <p>
-                        <span class="dk">Maersk</span> opererer olieblokke i
-                        Angola (Block 8 og 16) og er en af verdens storste
-                        container-rederier — de sejler mineralerne.
-                    </p>
-                    <p>
-                        <span class="dk">Danida</span> er engageret i regionen
-                        med udviklingsbistand.
-                    </p>
-                    <p>
-                        Kobolten i din <strong>Volvo EX30</strong> (bygget i
-                        Ghent, solgt i Danmark) eller din
-                        <strong>iPhone</strong> kan stamme direkte fra disse
-                        miner.
+                        <span class="gold">KoBold Metals</span> blev grundlagt
+                        i 2018 og er finansieret af bl.a. <span class="gold">Jeff Bezos</span> og
+                        Breakthrough Energy, 
+                        klimafonden startet af
+                        <span class="gold">Bill Gates</span>.
                     </p>
                 </div>
             </div>
 
-            <div class="step" data-chapter="eu-policy">
+            <!-- KAPITEL 7.1: Biden -->
+            <div class="step" data-chapter="biden">
                 <div class="step-inner">
-                    <div class="label">Kapitel 10</div>
-                    <h2>EU's svar: Critical Raw Materials Act</h2>
+            
+                    <h2>Fra Silicon Valley til kobberb&aelig;ltet</h2>
                     <p>
-                        EU's
-                        <span class="eu">Critical Raw Materials Act</span>
-                        (2024) udpeger kobber og kobolt som strategiske
-                        materialer. Malet er at:
+                        Da Joe Biden i december 2024 bes&oslash;gte Angola, hvilket var det f&oslash;rste amerikanske
+                        pr&aelig;sidentbes&oslash;g nogensinde i landet,
+                        fremh&aelig;vede han netop KoBold:
                     </p>
-                    <p>
-                        &#x2022; Udvinde mindst <strong>10%</strong> af EU's
-                        behov internt<br />
-                        &#x2022; Forarbejde mindst <strong>40%</strong> i
-                        Europa<br />
-                        &#x2022; Sikre at ingen tredjeland leverer mere end
-                        <strong>65%</strong>
-                    </p>
-                    <p>
-                        Lobito-korridoren er central i denne strategi — et
-                        alternativ til den kinesisk-dominerede forsyningskæde
-                        via ostafrikanske havne.
+                    <blockquote>
+                        &ldquo;KoBold is literally the company that connects the
+                        20th century and the 21st century. It&rsquo;s a technology
+                        company that&rsquo;s gone into the mining industry for
+                        products that will go into chips and electric
+                        vehicles.&rdquo;
+                    </blockquote>
+                    <p class="attribution">
+                        &mdash; Joe Biden, Luanda, Angola, december 2024
                     </p>
                 </div>
             </div>
 
-            <div class="step" data-chapter="final">
+            <!-- KAPITEL 9: Tvangsfjernelse -->
+            <div class="step" data-chapter="evictions">
                 <div class="step-inner">
-                    <div class="label">Konklusion</div>
-                    <h2>En korridor, to verdensordener</h2>
+                    <h2>Fra Silicon Valley til kobberb&aelig;ltet</h2>
                     <p>
-                        Lobito-korridoren er mere end en jernbane. Det er
-                        frontlinjen i en global kamp om de mineraler, der skal
-                        drive den gronne omstilling.
+                        Hvis vi vender tilbage til Kolwezi, byen der siden 2015 allerede har oplevet tvangsflytninger, viser en unders&oslash;gelse fra Global Witness (december 2025), at jernbanens opgradering truer endnu tusindvis af beboere langs sporet.
                     </p>
                     <p>
-                        Fra minen i Kolwezi til batteriet i din bil —
-                        forsyningskæden er lang, geopolitisk og dybt omstridt.
+                        I kvarteret <span class="gold">Bel Air</span> i Kolwezi l&oslash;ber jernbanen midt igennem et t&aelig;tbefolket omr&aring;de. B&oslash;rn leger p&aring; skinnerne. Familier krydser sporet dagligt. Men siden 2024 er de f&oslash;rste tog fra <em>Lobito Atlantic Railway</em> begyndt at k&oslash;re.
                     </p>
                     <p>
-                        <em
-                            >Sporgsmaalet er: Hvem far gavn af Afrikas rigdom
-                            denne gang?</em
-                        >
+                        Op til <span class="gold">6.500</span> mennesker kan v&aelig;re i risiko for tvangsflytning som f&oslash;lge af jernbanens genopbygning langs str&aelig;kningen fra Kolwezi til den angolske gr&aelig;nse.
+                    </p>
+                </div>
+            </div>
+
+            <!-- KAPITEL 10: Juridisk vakuum -->
+            <div class="step" data-chapter="legal-gap">
+                <div class="step-inner">
+                    <h2>Fra Silicon Valley til kobberb&aelig;ltet</h2>
+                    <p>
+                        Selvom jernbanen g&aring;r igennem et mineomr&aring;de, er den ikke d&aelig;kket af Congos minelov &mdash; der p&aring;l&aelig;gger mineselskaber at sikre de ber&oslash;rte en bedre levestandard andetsteds.
+                    </p>
+                    <p>
+                        I stedet g&aelig;lder ekspropriationsloven, som kun kr&aelig;ver &oslash;konomisk kompensation. Beboere fortæller, at selv den er udeblevet, da staten fjernede folk for at rydde plads til en ny vej.
+                    </p>
+                    <p>
+                        Global Witness kalder projektet en <em>lakmuspr&oslash;ve</em>: Vil vestlige investorer mene det alvorligt, n&aring;r de lover Afrika en mere retf&aelig;rdig model for ressourceudvinding?
+                    </p>
+                    <p style="font-size:12px;color:#ff0000;margin-top:12px;">
+                        Kilde: <a href="https://globalwitness.org/en/campaigns/transition-minerals/thousands-in-drc-could-face-eviction-from-lobito-corridor-railway/" target="_blank" style="color:#457b9d;pointer-events:auto;">Global Witness, december 2025</a>
                     </p>
                 </div>
             </div>
         </div>
 
         <div id="outro">
-            <h2>Datakilder og metode</h2>
+            <h2>Datakilder</h2>
             <p>
-                Minedata: USGS Africa Mineral Industries Geodatabase, Maus et
-                al. (2022) Global Mining Polygons, IPIS DRC Open Data.
+                Minedata: USGS Africa Mineral Industries, Maus et al. (2022),
+                IPIS DRC Open Data.
             </p>
             <p>
-                Satellitbilleder: Copernicus Sentinel-2 via Google Earth Engine.
-                Ejerskabsdata: USGS facility records.
-            </p>
-            <p>
-                Jernbane: USGS Africa GIS Transport layer. Byer: Natural Earth
-                10m Populated Places.
-            </p>
-            <p>
-                Forsyningskæde-ruter er illustrative og baseret pa kendte
-                handelsruter og virksomhedsforbindelser.
+                Jernbane: USGS Africa GIS. Byer: Natural Earth. Ejerskab: USGS
+                facility records.
             </p>
             <div class="source">
                 Bygget med MapLibre GL JS + Scrollama. Data pr. marts 2026.
@@ -514,141 +649,142 @@
         </div>
 
         <script>
+            /* ── Inline GeoJSON for Benguela split & new features ── */
+
+            const benguelaLine = {
+                type: "Feature",
+                geometry: {
+                    type: "LineString",
+                    coordinates: [
+                        [13.55,-12.34],[13.41,-12.58],[15.73,-12.78],
+                        [16.94,-12.39],[19.87,-11.78],[22.0,-11.5],
+                        [23.4,-11.15],[25.47,-10.72],[26.73,-10.99]
+                    ]
+                }
+            };
+            const extensionLine = {
+                type: "Feature",
+                geometry: {
+                    type: "LineString",
+                    coordinates: [
+                        [26.73,-10.99],[27.48,-11.68],[28.24,-12.37],
+                        [28.23,-12.8],[28.63,-13.0]
+                    ]
+                }
+            };
+            const discoveryPoints = {
+                type: "FeatureCollection",
+                features: [
+                    { type:"Feature", properties:{name:"Mingomba"}, geometry:{type:"Point",coordinates:[28.0,-12.35]} },
+                    { type:"Feature", properties:{name:"Manono"},   geometry:{type:"Point",coordinates:[27.42,-7.3]} }
+                ]
+            };
+            const svArc = {
+                type: "Feature",
+                geometry: {
+                    type: "LineString",
+                    coordinates: [
+                        [27,-11],[20,-5],[13,0],[6,5],[-2,9],[-10,13],
+                        [-18,17],[-26,21],[-35,25],[-44,28],[-53,30],
+                        [-62,32],[-72,33.5],[-82,34.5],[-92,35],
+                        [-102,36],[-112,37],[-122,37.4]
+                    ]
+                }
+            };
+            const dcArc = {
+                type: "Feature",
+                geometry: {
+                    type: "LineString",
+                    // Arc from Washington D.C. (-77, 38.9) to Luanda, Angola (13.23, -8.84)
+                    coordinates: [
+                        [-77,38.9],[-65,35],[-53,28],[-41,20],[-29,12],
+                        [-17,4],[-6,-2],[5,-6],[13.23,-8.84]
+                    ]
+                }
+            };
+            const usEndpoints = {
+                type: "FeatureCollection",
+                features: [
+                    { type:"Feature", properties:{name:"Silicon Valley",ep:"sv"}, geometry:{type:"Point",coordinates:[-122,37.4]} },
+                    { type:"Feature", properties:{name:"Washington D.C.",ep:"dc"}, geometry:{type:"Point",coordinates:[-77,38.9]} },
+                    { type:"Feature", properties:{name:"Luanda, Angola",ep:"luanda"}, geometry:{type:"Point",coordinates:[13.23,-8.84]} }
+                ]
+            };
+
+            /* ── Chapter config ── */
+
             const CHAPTERS = {
-                lobito: {
-                    center: [13.55, -12.34],
-                    zoom: 10,
-                    pitch: 40,
-                    bearing: 20,
-                    layers: ["railway"],
+                intro: {
+                    center:[20.5,-11.5], zoom:5.5, pitch:20, bearing:0,
+                    layers:["corridor-full","cities-labels"]
                 },
-                railway: {
-                    center: [20.5, -11.8],
-                    zoom: 5.5,
-                    pitch: 30,
-                    bearing: 0,
-                    layers: ["railway", "cities-labels"],
+                benguela: {
+                    center:[20.0,-11.5], zoom:5.5, pitch:30, bearing:0,
+                    layers:["benguela-line","extension-line","cities-labels"]
                 },
-                copperbelt: {
-                    center: [27.0, -11.5],
-                    zoom: 7.5,
-                    pitch: 40,
-                    bearing: -15,
-                    layers: ["railway", "maus-polygons", "cities-labels"],
+                "civil-war": {
+                    center:[20.0,-11.5], zoom:5.5, pitch:30, bearing:0,
+                    layers:["benguela-line","extension-line","cities-labels"],
+                    dimBenguela: true
                 },
-                geology: {
-                    center: [26.5, -11.2],
-                    zoom: 7,
-                    pitch: 30,
-                    bearing: 0,
-                    layers: [
-                        "railway",
-                        "maus-polygons",
-                        "copper-tracts",
-                        "copper-tracts-outline",
-                        "cities-labels",
-                    ],
+                minerals: {
+                    center:[20.0,-11.5], zoom:5.5, pitch:30, bearing:0,
+                    layers:["copper-tracts","copper-tracts-outline","maus-polygons","cities-labels"]
                 },
-                ownership: {
-                    center: [26.8, -11.5],
-                    zoom: 7,
-                    pitch: 20,
-                    bearing: 0,
-                    layers: [
-                        "railway",
-                        "facilities-chinese",
-                        "facilities-western",
-                        "facilities-state",
-                        "cities-labels",
-                    ],
+                china: {
+                    center:[26.5,-11.0], zoom:6, pitch:20, bearing:0,
+                    layers:["corridor-full","facilities-chinese","facilities-chinese-labels","cities-labels"]
                 },
-                "china-detail": {
-                    center: [26.5, -10.8],
-                    zoom: 8,
-                    pitch: 35,
-                    bearing: 10,
-                    layers: [
-                        "railway",
-                        "facilities-chinese",
-                        "facilities-chinese-labels",
-                        "cities-labels",
-                    ],
+                kolwezi: {
+                    center:[25.4265,-10.7155], zoom:12, pitch:25, bearing:-5,
+                    layers:["corridor-full","maus-polygons","cities-labels"]
                 },
-                "supply-chain": {
-                    center: [20.0, -11.5],
-                    zoom: 5.2,
-                    pitch: 20,
-                    bearing: 0,
-                    layers: ["railway", "cities-labels"],
+                kolwezimine: {
+                    center:[25.4265,-10.6855], zoom:15.5, pitch:0, bearing:0,
+                    layers:[]
                 },
-                "europe-arcs": {
-                    center: [8, 20],
-                    zoom: 2.8,
-                    pitch: 0,
-                    bearing: 0,
-                    layers: [
-                        "railway",
-                        "supply-sea",
-                        "europe-dots",
-                        "europe-labels",
-                        "cities-labels",
-                    ],
+                western: {
+                    center:[27.5,-12.0], zoom:7, pitch:30, bearing:0,
+                    layers:["corridor-full","facilities-western","facilities-western-labels","cities-labels"]
                 },
-                denmark: {
-                    center: [12.5, 55.5],
-                    zoom: 5.5,
-                    pitch: 30,
-                    bearing: 0,
-                    layers: ["supply-sea", "europe-dots", "europe-labels"],
+                kobold: {
+                    center:[27.5,-10.0], zoom:5.5, pitch:20, bearing:0,
+                    layers:["corridor-full","discovery-dots","discovery-labels","cities-labels"]
                 },
-                "eu-policy": {
-                    center: [10, 35],
-                    zoom: 3.2,
-                    pitch: 0,
-                    bearing: 0,
-                    layers: [
-                        "railway",
-                        "supply-sea",
-                        "europe-dots",
-                        "europe-labels",
-                        "facilities-chinese",
-                        "facilities-western",
-                    ],
+                "silicon-valley": {
+                    center:[-122,37.5], zoom:6.5, pitch:0, bearing:0,
+                    layers:["corridor-full","sv-line","sv-dot","sv-label","discovery-dots","discovery-labels"]
                 },
-                final: {
-                    center: [15, 10],
-                    zoom: 2.5,
-                    pitch: 30,
-                    bearing: -10,
-                    layers: [
-                        "railway",
-                        "supply-sea",
-                        "maus-polygons",
-                        "facilities-chinese",
-                        "facilities-western",
-                        "europe-dots",
-                        "europe-labels",
-                        "cities-labels",
-                    ],
+                biden: {
+                    center:[-32,18], zoom:2.8, pitch:0, bearing:0,
+                    layers:["corridor-full","sv-line","dc-line","sv-dot","dc-dot","sv-label","dc-label","luanda-dot","luanda-label","discovery-dots"]
                 },
+                question: {
+                    center:[24,-10], zoom:5.5, pitch:25, bearing:-15,
+                    layers:["corridor-full","facilities-chinese","facilities-western","discovery-dots","maus-polygons","cities-labels"]
+                },
+                evictions: {
+                    center:[25.4265,-10.6855], zoom:13, pitch:30, bearing:10,
+                    layers:["corridor-full","maus-polygons","cities-labels"]
+                },
+                "legal-gap": {
+                    center:[25.4265,-10.6855], zoom:13, pitch:30, bearing:10,
+                    layers:["corridor-full","maus-polygons","cities-labels"]
+                }
             };
 
             const ALL_TOGGLE_LAYERS = [
-                "railway",
-                "maus-polygons",
-                "copper-tracts",
-                "copper-tracts-outline",
-                "facilities-chinese",
-                "facilities-western",
-                "facilities-state",
-                "facilities-chinese-labels",
-                "countries-fill",
-                "countries-outline",
-                "cities-labels",
-                "supply-sea",
-                "europe-dots",
-                "europe-labels",
+                "corridor-full","benguela-line","extension-line","railway","sat-overlay-2025",
+                "copper-tracts","copper-tracts-outline","maus-polygons",
+                "facilities-chinese","facilities-chinese-labels",
+                "facilities-western","facilities-western-labels",
+                "discovery-dots","discovery-labels",
+                "sv-line","dc-line","sv-dot","dc-dot","sv-label","dc-label",
+                "luanda-dot","luanda-label",
+                "cities-labels"
             ];
+
+            /* ── Map ── */
 
             const map = new maplibregl.Map({
                 container: "map",
@@ -656,418 +792,270 @@
                     version: 8,
                     glyphs: "https://demotiles.maplibre.org/font/{fontstack}/{range}.pbf",
                     sources: {
-                        "carto-dark": {
+                        "carto-light": {
                             type: "raster",
-                            tiles: [
-                                "https://basemaps.cartocdn.com/dark_nolabels/{z}/{x}/{y}@2x.png",
-                            ],
+                            tiles: ["https://basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}@2x.png"],
                             tileSize: 256,
-                            attribution: "&copy; CARTO &copy; OpenStreetMap",
-                        },
+                            attribution: "&copy; CARTO &copy; OpenStreetMap"
+                        }
                     },
-                    layers: [
-                        {
-                            id: "carto-dark",
-                            type: "raster",
-                            source: "carto-dark",
-                        },
-                    ],
+                    layers: [{ id:"carto-light", type:"raster", source:"carto-light" }]
                 },
-                center: [18, -10],
-                zoom: 4.2,
-                pitch: 0,
-                bearing: 0,
-                interactive: false,
+                center: [18,-10], zoom: 3.8, pitch: 0, bearing: 0,
+                interactive: false
             });
-
             map.scrollZoom.disable();
             map.dragPan.enable();
             map.dragRotate.enable();
 
             map.on("load", async () => {
-                console.log("Loading GeoJSON data...");
-                let corridorLine,
-                    railway,
-                    facilities,
-                    copperTracts,
-                    maus,
-                    cities,
-                    countries,
-                    supplyChains,
-                    europeDests;
+                let corridorLine, railway, facilities, copperTracts, maus, cities, countries;
                 try {
-                    [
-                        corridorLine,
-                        railway,
-                        facilities,
-                        copperTracts,
-                        maus,
-                        cities,
-                        countries,
-                        supplyChains,
-                        europeDests,
-                    ] = await Promise.all([
-                        fetch("data/corridor_line.geojson").then((r) => {
-                            if (!r.ok)
-                                throw new Error("corridor_line: " + r.status);
-                            return r.json();
-                        }),
-                        fetch("data/railway.geojson").then((r) => {
-                            if (!r.ok) throw new Error("railway: " + r.status);
-                            return r.json();
-                        }),
-                        fetch("data/facilities_ownership.geojson").then((r) => {
-                            if (!r.ok)
-                                throw new Error("facilities: " + r.status);
-                            return r.json();
-                        }),
-                        fetch("data/copper_tracts.geojson").then((r) => {
-                            if (!r.ok)
-                                throw new Error("copper_tracts: " + r.status);
-                            return r.json();
-                        }),
-                        fetch("data/maus_polygons.geojson").then((r) => {
-                            if (!r.ok) throw new Error("maus: " + r.status);
-                            return r.json();
-                        }),
-                        fetch("data/cities.geojson").then((r) => {
-                            if (!r.ok) throw new Error("cities: " + r.status);
-                            return r.json();
-                        }),
-                        fetch("data/countries.geojson").then((r) => {
-                            if (!r.ok)
-                                throw new Error("countries: " + r.status);
-                            return r.json();
-                        }),
-                        fetch("data/supply_chains.geojson").then((r) => {
-                            if (!r.ok)
-                                throw new Error("supply_chains: " + r.status);
-                            return r.json();
-                        }),
-                        fetch("data/european_destinations.geojson").then(
-                            (r) => {
-                                if (!r.ok)
-                                    throw new Error(
-                                        "european_destinations: " + r.status,
-                                    );
-                                return r.json();
-                            },
-                        ),
-                    ]);
-                    console.log("All data loaded successfully");
-                } catch (err) {
-                    console.error("Failed to load data:", err);
-                    document.getElementById("hero").innerHTML +=
-                        '<p style="color:red;margin-top:20px;">Data load error: ' +
-                        err.message +
-                        "</p>";
+                    [corridorLine, railway, facilities, copperTracts, maus, cities, countries] =
+                        await Promise.all([
+                            fetch("data/corridor_line.geojson").then(r=>{if(!r.ok)throw new Error("corridor_line:"+r.status);return r.json()}),
+                            fetch("data/railway.geojson").then(r=>{if(!r.ok)throw new Error("railway:"+r.status);return r.json()}),
+                            fetch("data/facilities_ownership.geojson").then(r=>{if(!r.ok)throw new Error("facilities:"+r.status);return r.json()}),
+                            fetch("data/copper_tracts.geojson").then(r=>{if(!r.ok)throw new Error("copper_tracts:"+r.status);return r.json()}),
+                            fetch("data/maus_polygons.geojson").then(r=>{if(!r.ok)throw new Error("maus:"+r.status);return r.json()}),
+                            fetch("data/cities.geojson").then(r=>{if(!r.ok)throw new Error("cities:"+r.status);return r.json()}),
+                            fetch("data/countries.geojson").then(r=>{if(!r.ok)throw new Error("countries:"+r.status);return r.json()})
+                        ]);
+                } catch(err) {
+                    console.error("Data load failed:",err);
+                    document.getElementById("hero").innerHTML+=
+                        '<p style="color:red;margin-top:20px;">Data load error: '+err.message+'</p>';
                     return;
                 }
 
-                // Split facilities and supply chain legs
-                const chineseFac = {
-                    ...facilities,
-                    features: facilities.features.filter(
-                        (f) => f.properties.ownership === "Chinese",
-                    ),
-                };
-                const westernFac = {
-                    ...facilities,
-                    features: facilities.features.filter(
-                        (f) => f.properties.ownership === "Western",
-                    ),
-                };
-                const stateFac = {
-                    ...facilities,
-                    features: facilities.features.filter(
-                        (f) => f.properties.ownership === "State-owned",
-                    ),
-                };
-                const supplySea = {
-                    ...supplyChains,
-                    features: supplyChains.features.filter(
-                        (f) => f.properties.leg === "sea",
-                    ),
-                };
+                const chineseFac = {...facilities, features:facilities.features.filter(f=>f.properties.ownership==="Chinese")};
+                const westernFac = {...facilities, features:facilities.features.filter(f=>f.properties.ownership==="Western")};
 
-                // Add all sources
-                map.addSource("railway", { type: "geojson", data: railway });
-                map.addSource("facilities-chinese", {
-                    type: "geojson",
-                    data: chineseFac,
-                });
-                map.addSource("facilities-western", {
-                    type: "geojson",
-                    data: westernFac,
-                });
-                map.addSource("facilities-state", {
-                    type: "geojson",
-                    data: stateFac,
-                });
-                map.addSource("copper-tracts", {
-                    type: "geojson",
-                    data: copperTracts,
-                });
-                map.addSource("maus-polygons", { type: "geojson", data: maus });
-                map.addSource("cities", { type: "geojson", data: cities });
-                map.addSource("countries", {
-                    type: "geojson",
-                    data: countries,
-                });
-                map.addSource("supply-sea", {
-                    type: "geojson",
-                    data: supplySea,
-                });
-                map.addSource("europe-dests", {
-                    type: "geojson",
-                    data: europeDests,
-                });
+                /* Sources */
+                map.addSource("corridor-full",{type:"geojson",data:corridorLine});
+                map.addSource("railway",{type:"geojson",data:railway});
+                map.addSource("facilities-chinese",{type:"geojson",data:chineseFac});
+                map.addSource("facilities-western",{type:"geojson",data:westernFac});
+                map.addSource("copper-tracts",{type:"geojson",data:copperTracts});
+                map.addSource("maus-polygons",{type:"geojson",data:maus});
+                map.addSource("cities",{type:"geojson",data:cities});
+                map.addSource("countries",{type:"geojson",data:countries});
+                map.addSource("benguela-section",{type:"geojson",data:benguelaLine});
+                map.addSource("extension-section",{type:"geojson",data:extensionLine});
+                map.addSource("discovery",{type:"geojson",data:discoveryPoints});
+                map.addSource("sv-arc",{type:"geojson",data:svArc});
+                map.addSource("dc-arc",{type:"geojson",data:dcArc});
+                map.addSource("us-endpoints",{type:"geojson",data:usEndpoints});
 
-                // ── Layers ──
+                /* Layers */
+                map.addLayer({id:"copper-tracts",type:"fill",source:"copper-tracts",
+                    paint:{"fill-color":"#e63946","fill-opacity":0.15},layout:{visibility:"none"}});
+                map.addLayer({id:"copper-tracts-outline",type:"line",source:"copper-tracts",
+                    paint:{"line-color":"#e63946","line-width":1.5,"line-dasharray":[4,3]},layout:{visibility:"none"}});
+                map.addLayer({id:"maus-polygons",type:"fill",source:"maus-polygons",
+                    paint:{"fill-color":"#a855f7","fill-opacity":0.5},layout:{visibility:"none"}});
 
-                map.addLayer({
-                    id: "countries-fill",
-                    type: "fill",
-                    source: "countries",
-                    paint: { "fill-color": "#1a1a2e", "fill-opacity": 0.3 },
-                    layout: { visibility: "none" },
-                });
-                map.addLayer({
-                    id: "countries-outline",
-                    type: "line",
-                    source: "countries",
-                    paint: { "line-color": "#333", "line-width": 1 },
-                    layout: { visibility: "none" },
-                });
+                map.addLayer({id:"corridor-full",type:"line",source:"corridor-full",
+                    paint:{"line-color":"#457b9d","line-width":3.5,"line-opacity":0.9},layout:{visibility:"none"}});
+                map.addLayer({id:"railway",type:"line",source:"railway",
+                    paint:{"line-color":"#ff8c00","line-width":2.5,"line-opacity":0.7},layout:{visibility:"none"}});
+                map.addLayer({id:"benguela-line",type:"line",source:"benguela-section",
+                    paint:{"line-color":"#ff8c00","line-width":3.5,"line-opacity":1},layout:{visibility:"none"}});
+                map.addLayer({id:"extension-line",type:"line",source:"extension-section",
+                    paint:{"line-color":"#e63946","line-width":2.5,"line-opacity":0.2},layout:{visibility:"none"}});
 
-                map.addLayer({
-                    id: "copper-tracts",
-                    type: "fill",
-                    source: "copper-tracts",
-                    paint: { "fill-color": "#e63946", "fill-opacity": 0.15 },
-                    layout: { visibility: "none" },
-                });
-                map.addLayer({
-                    id: "copper-tracts-outline",
-                    type: "line",
-                    source: "copper-tracts",
-                    paint: {
-                        "line-color": "#e63946",
-                        "line-width": 1.5,
-                        "line-dasharray": [4, 3],
-                    },
-                    layout: { visibility: "none" },
-                });
+                map.addLayer({id:"facilities-chinese",type:"circle",source:"facilities-chinese",
+                    paint:{"circle-radius":6,"circle-color":"#e63946","circle-stroke-width":1.5,"circle-stroke-color":"#fff","circle-opacity":0.9},
+                    layout:{visibility:"none"}});
+                map.addLayer({id:"facilities-chinese-labels",type:"symbol",source:"facilities-chinese",
+                    layout:{"text-field":["get","FeatureNam"],"text-size":11,"text-offset":[0,1.5],"text-anchor":"top",visibility:"none"},
+                    paint:{"text-color":"#e63946","text-halo-color":"#fff","text-halo-width":1.5}});
 
-                map.addLayer({
-                    id: "maus-polygons",
-                    type: "fill",
-                    source: "maus-polygons",
-                    paint: { "fill-color": "#a855f7", "fill-opacity": 0.5 },
-                    layout: { visibility: "none" },
-                });
+                map.addLayer({id:"facilities-western",type:"circle",source:"facilities-western",
+                    paint:{"circle-radius":6,"circle-color":"#457b9d","circle-stroke-width":1.5,"circle-stroke-color":"#fff","circle-opacity":0.9},
+                    layout:{visibility:"none"}});
+                map.addLayer({id:"facilities-western-labels",type:"symbol",source:"facilities-western",
+                    layout:{"text-field":["get","FeatureNam"],"text-size":11,"text-offset":[0,1.5],"text-anchor":"top",visibility:"none"},
+                    paint:{"text-color":"#457b9d","text-halo-color":"#fff","text-halo-width":1.5}});
 
-                // Supply chain: sea legs (animated teal)
-                map.addLayer({
-                    id: "supply-sea",
-                    type: "line",
-                    source: "supply-sea",
-                    paint: {
-                        "line-color": "#2a9d8f",
-                        "line-width": 2,
-                        "line-opacity": 0.7,
-                        "line-dasharray": [3, 2],
-                    },
-                    layout: { visibility: "none" },
-                });
+                map.addLayer({id:"discovery-dots",type:"circle",source:"discovery",
+                    paint:{"circle-radius":9,"circle-color":"#f1c40f","circle-stroke-width":2.5,"circle-stroke-color":"#fff","circle-opacity":0.95},
+                    layout:{visibility:"none"}});
+                map.addLayer({id:"discovery-labels",type:"symbol",source:"discovery",
+                    layout:{"text-field":["get","name"],"text-size":13,"text-offset":[0,2],"text-anchor":"top","text-allow-overlap":true,visibility:"none"},
+                    paint:{"text-color":"#f1c40f","text-halo-color":"#fff","text-halo-width":1.5}});
 
-                // European destination dots
-                map.addLayer({
-                    id: "europe-dots",
-                    type: "circle",
-                    source: "europe-dests",
-                    paint: {
-                        "circle-radius": 7,
-                        "circle-color": "#2a9d8f",
-                        "circle-stroke-width": 2,
-                        "circle-stroke-color": "#fff",
-                        "circle-opacity": 0.95,
-                    },
-                    layout: { visibility: "none" },
-                });
+                map.addLayer({id:"sv-line",type:"line",source:"sv-arc",
+                    paint:{"line-color":"#f1c40f","line-width":1.5,"line-opacity":0.5,"line-dasharray":[6,4]},layout:{visibility:"none"}});
+                map.addLayer({id:"dc-line",type:"line",source:"dc-arc",
+                    paint:{"line-color":"#457b9d","line-width":1.5,"line-opacity":0.5,"line-dasharray":[6,4]},layout:{visibility:"none"}});
 
-                // European destination labels
-                map.addLayer({
-                    id: "europe-labels",
-                    type: "symbol",
-                    source: "europe-dests",
-                    layout: {
-                        "text-field": ["get", "name"],
-                        "text-size": 12,
-                        "text-offset": [0, 1.8],
-                        "text-anchor": "top",
-                        "text-allow-overlap": true,
-                        visibility: "none",
-                    },
-                    paint: {
-                        "text-color": "#2a9d8f",
-                        "text-halo-color": "#000",
-                        "text-halo-width": 1.5,
-                    },
-                });
+                map.addLayer({id:"sv-dot",type:"circle",source:"us-endpoints",filter:["==",["get","ep"],"sv"],
+                    paint:{"circle-radius":7,"circle-color":"#f1c40f","circle-stroke-width":2,"circle-stroke-color":"#fff"},layout:{visibility:"none"}});
+                map.addLayer({id:"dc-dot",type:"circle",source:"us-endpoints",filter:["==",["get","ep"],"dc"],
+                    paint:{"circle-radius":7,"circle-color":"#457b9d","circle-stroke-width":2,"circle-stroke-color":"#fff"},layout:{visibility:"none"}});
+                map.addLayer({id:"sv-label",type:"symbol",source:"us-endpoints",filter:["==",["get","ep"],"sv"],
+                    layout:{"text-field":["get","name"],"text-size":13,"text-offset":[0,1.8],"text-anchor":"top","text-allow-overlap":true,visibility:"none"},
+                    paint:{"text-color":"#f1c40f","text-halo-color":"#fff","text-halo-width":1.5}});
+                map.addLayer({id:"dc-label",type:"symbol",source:"us-endpoints",filter:["==",["get","ep"],"dc"],
+                    layout:{"text-field":["get","name"],"text-size":13,"text-offset":[0,1.8],"text-anchor":"top","text-allow-overlap":true,visibility:"none"},
+                    paint:{"text-color":"#457b9d","text-halo-color":"#fff","text-halo-width":1.5}});
 
-                // Supply chain: rail leg (solid orange)
-                map.addLayer({
-                    id: "railway",
-                    type: "line",
-                    source: "railway",
-                    paint: {
-                        "line-color": "#ff8c00",
-                        "line-width": 2.5,
-                        "line-opacity": 0.7,
-                    },
-                    layout: { visibility: "none" },
-                });
+                map.addLayer({id:"luanda-dot",type:"circle",source:"us-endpoints",filter:["==",["get","ep"],"luanda"],
+                    paint:{"circle-radius":7,"circle-color":"#ff8c00","circle-stroke-width":2,"circle-stroke-color":"#fff"},layout:{visibility:"none"}});
+                map.addLayer({id:"luanda-label",type:"symbol",source:"us-endpoints",filter:["==",["get","ep"],"luanda"],
+                    layout:{"text-field":["get","name"],"text-size":13,"text-offset":[0,1.8],"text-anchor":"top","text-allow-overlap":true,visibility:"none"},
+                    paint:{"text-color":"#ff8c00","text-halo-color":"#fff","text-halo-width":1.5}});
 
-                map.addLayer({
-                    id: "facilities-chinese",
-                    type: "circle",
-                    source: "facilities-chinese",
-                    paint: {
-                        "circle-radius": 6,
-                        "circle-color": "#e63946",
-                        "circle-stroke-width": 1.5,
-                        "circle-stroke-color": "#fff",
-                        "circle-opacity": 0.9,
-                    },
-                    layout: { visibility: "none" },
-                });
-                map.addLayer({
-                    id: "facilities-chinese-labels",
-                    type: "symbol",
-                    source: "facilities-chinese",
-                    layout: {
-                        "text-field": ["get", "FeatureNam"],
-                        "text-size": 11,
-                        "text-offset": [0, 1.5],
-                        "text-anchor": "top",
-                        visibility: "none",
-                    },
-                    paint: {
-                        "text-color": "#e63946",
-                        "text-halo-color": "#000",
-                        "text-halo-width": 1.5,
-                    },
-                });
-                map.addLayer({
-                    id: "facilities-western",
-                    type: "circle",
-                    source: "facilities-western",
-                    paint: {
-                        "circle-radius": 6,
-                        "circle-color": "#457b9d",
-                        "circle-stroke-width": 1.5,
-                        "circle-stroke-color": "#fff",
-                        "circle-opacity": 0.9,
-                    },
-                    layout: { visibility: "none" },
-                });
-                map.addLayer({
-                    id: "facilities-state",
-                    type: "circle",
-                    source: "facilities-state",
-                    paint: {
-                        "circle-radius": 5,
-                        "circle-color": "#e9c46a",
-                        "circle-stroke-width": 1,
-                        "circle-stroke-color": "#fff",
-                        "circle-opacity": 0.9,
-                    },
-                    layout: { visibility: "none" },
-                });
+                map.addLayer({id:"cities-labels",type:"symbol",source:"cities",
+                    layout:{"text-field":["get","name"],"text-size":["interpolate",["linear"],["get","pop_max"],10000,10,100000,12,500000,14,1000000,16],
+                        "text-anchor":"center","text-allow-overlap":false,"text-padding":4,visibility:"none"},
+                    paint:{"text-color":"#111","text-halo-color":"rgba(0,0,0,0)","text-halo-width":0}});
 
-                map.addLayer({
-                    id: "cities-labels",
-                    type: "symbol",
-                    source: "cities",
-                    layout: {
-                        "text-field": ["get", "name"],
-                        "text-size": [
-                            "interpolate",
-                            ["linear"],
-                            ["get", "pop_max"],
-                            10000,
-                            10,
-                            100000,
-                            12,
-                            500000,
-                            14,
-                            1000000,
-                            16,
-                        ],
-                        "text-anchor": "center",
-                        "text-allow-overlap": false,
-                        "text-padding": 4,
-                        visibility: "none",
-                    },
-                    paint: {
-                        "text-color": "#ccc",
-                        "text-halo-color": "#000",
-                        "text-halo-width": 1.5,
-                    },
-                });
+                /* Initial state — all layers at 50% opacity so map "sits lower" visually */
+                map.setLayoutProperty("corridor-full","visibility","visible");
+                map.setPaintProperty("corridor-full","line-opacity",0.45);
+                map.setLayoutProperty("cities-labels","visibility","visible");
+                map.setLayoutProperty("copper-tracts","visibility","visible");
+                map.setPaintProperty("copper-tracts","fill-opacity",0.08);
+                map.setLayoutProperty("copper-tracts-outline","visibility","visible");
+                map.setPaintProperty("copper-tracts-outline","line-opacity",0.45);
+                map.setLayoutProperty("maus-polygons","visibility","visible");
+                map.setPaintProperty("maus-polygons","fill-opacity",0.25);
 
-                // Show initial state
-                map.setLayoutProperty("railway", "visibility", "visible");
-                map.setLayoutProperty("cities-labels", "visibility", "visible");
+                setTimeout(()=>{
+                    map.flyTo({center:[20.5,-8.5],zoom:4.3,pitch:20,bearing:0,duration:3000});
+                },500);
 
-                setTimeout(() => {
-                    map.flyTo({
-                        center: [20.5, -11.8],
-                        zoom: 4.8,
-                        pitch: 20,
-                        bearing: 0,
-                        duration: 3000,
-                    });
-                }, 500);
+                /* Scrollama */
+                const textBox = document.getElementById("text-box-content");
+                const chapterTitle = document.getElementById("chapter-title");
+                let currentChapterId = null;
 
-                // ── Scrollama ──
+                function swapText(html) {
+                    const tmp = document.createElement("div");
+                    tmp.innerHTML = html;
+                    const h2 = tmp.querySelector("h2");
+                    if(h2) {
+                        chapterTitle.textContent = h2.textContent;
+                        chapterTitle.classList.add("show");
+                        h2.remove();
+                    }
+                    document.getElementById("text-box").classList.add("show");
+                    textBox.classList.add("fading");
+                    setTimeout(() => {
+                        textBox.innerHTML = tmp.innerHTML;
+                        textBox.classList.remove("fading");
+                    }, 120);
+                }
+
                 const scroller = scrollama();
-                scroller
-                    .setup({ step: ".step", offset: 0.5, progress: false })
-                    .onStepEnter(({ element }) => {
+                scroller.setup({step:".step",offset:0.5,progress:false})
+                    .onStepEnter(({element})=>{
                         const chapterId = element.dataset.chapter;
+                        if(chapterId === currentChapterId) return;
+                        currentChapterId = chapterId;
                         const chapter = CHAPTERS[chapterId];
-                        if (!chapter) return;
+                        if(!chapter) return;
 
-                        element.classList.add("is-active");
+                        /* Swap text in fixed box */
+                        const inner = element.querySelector(".step-inner");
+                        if(inner) swapText(inner.innerHTML);
 
                         map.flyTo({
-                            center: chapter.center,
-                            zoom: chapter.zoom,
-                            pitch: chapter.pitch || 0,
-                            bearing: chapter.bearing || 0,
-                            duration: 2000,
-                            essential: true,
+                            center:chapter.center, zoom:chapter.zoom,
+                            pitch:chapter.pitch||0, bearing:chapter.bearing||0,
+                            duration:2000, essential:true
                         });
-
-                        ALL_TOGGLE_LAYERS.forEach((id) => {
-                            if (map.getLayer(id)) {
-                                map.setLayoutProperty(
-                                    id,
-                                    "visibility",
-                                    chapter.layers.includes(id)
-                                        ? "visible"
-                                        : "none",
-                                );
+                        ALL_TOGGLE_LAYERS.forEach(id=>{
+                            if(map.getLayer(id)){
+                                map.setLayoutProperty(id,"visibility",
+                                    chapter.layers.includes(id)?"visible":"none");
                             }
                         });
-                    })
-                    .onStepExit(({ element }) => {
-                        element.classList.remove("is-active");
-                    });
 
-                window.addEventListener("resize", scroller.resize);
+                        /* Restore full opacities (overrides the dimmed intro state) */
+                        map.setPaintProperty("corridor-full","line-opacity",0.9);
+                        map.setPaintProperty("copper-tracts","fill-opacity",0.15);
+                        map.setPaintProperty("copper-tracts-outline","line-opacity",1);
+                        map.setPaintProperty("maus-polygons","fill-opacity",0.5);
+
+                        // kolwezimine: show overlay only after map moveend, and don't reset toggle on scroll
+                        if(chapterId === "kolwezimine"){
+                            document.querySelectorAll(".sat-fullscreen").forEach(el=>el.classList.remove("show"));
+                            function showKolweziOverlay2025() {
+                                if(window.setKolweziOverlay) {
+                                    window.setKolweziOverlay(false); // show 2015 first (before mining)
+                                } else {
+                                    // fallback: show 2015 image
+                                    const img2015 = document.getElementById("sat-2015");
+                                    if(img2015) img2015.classList.add("show");
+                                }
+                            }
+                            if(map.isMoving()){
+                                map.once("moveend", showKolweziOverlay2025);
+                            } else {
+                                showKolweziOverlay2025();
+                            }
+                        } else {
+                            document.querySelectorAll(".sat-fullscreen").forEach(el=>el.classList.remove("show"));
+                            if(chapter.satImg){
+                                const satEl = document.getElementById(chapter.satImg);
+                                if(map.isMoving()){
+                                    map.once("moveend", ()=>{ satEl.classList.add("show"); });
+                                } else {
+                                    satEl.classList.add("show");
+                                }
+                            }
+                        }
+                // Kolwezi toggle logic for fullscreen overlays
+                (function(){
+                    window.showing2025 = false;
+                    window.setKolweziOverlay = function(is2025){
+                        const img2015 = document.getElementById("sat-2015");
+                        const img2025 = document.getElementById("sat-2025");
+                        const btn = document.getElementById("toggle-sat-btn");
+                        if(!img2015||!img2025||!btn) return;
+                        if(is2025){
+                            img2015.classList.remove("show");
+                            img2025.classList.add("show");
+                            btn.textContent = "Vis 2015";
+                        } else {
+                            img2015.classList.add("show");
+                            img2025.classList.remove("show");
+                            btn.textContent = "Vis 2025";
+                        }
+                        window.showing2025 = is2025;
+                    };
+                    // Only add the event listener once
+                    if(!window._kolweziToggleBound){
+                        document.body.addEventListener("click",function(e){
+                            if(e.target && e.target.id==="toggle-sat-btn"){
+                                window.setKolweziOverlay(!window.showing2025);
+                            }
+                        });
+                        window._kolweziToggleBound = true;
+                    }
+                })();
+
+                        /* Civil-war: grey out + dim the whole railway to show it was destroyed */
+                        if(chapter.dimBenguela){
+                            map.setPaintProperty("benguela-line","line-color","#555");
+                            map.setPaintProperty("benguela-line","line-opacity",0.3);
+                            map.setPaintProperty("benguela-line","line-dasharray",[4,4]);
+                            map.setPaintProperty("extension-line","line-color","#555");
+                            map.setPaintProperty("extension-line","line-opacity",0.2);
+                            map.setPaintProperty("extension-line","line-dasharray",[4,4]);
+                        } else if(chapter.layers.includes("benguela-line")){
+                            map.setPaintProperty("benguela-line","line-color","#ff8c00");
+                            map.setPaintProperty("benguela-line","line-opacity",1);
+                            map.setPaintProperty("benguela-line","line-dasharray",[1,0]);
+                            map.setPaintProperty("extension-line","line-color","#e63946");
+                            map.setPaintProperty("extension-line","line-opacity",0.2);
+                            map.setPaintProperty("extension-line","line-dasharray",[1,0]);
+                        }
+                    });
+                window.addEventListener("resize",scroller.resize);
             });
         </script>
     </body>
