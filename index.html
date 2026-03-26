@@ -137,10 +137,10 @@
 
             #map {
                 position: fixed;
-                top: 0;
+                top: 2vh;
                 left: 9vw;
                 width: calc(100vw - 18vw);
-                height: calc(100vh);
+                height: calc(100vh - 4vh);
                 z-index: 0;
                 border-radius: .1rem;
             }
@@ -234,10 +234,12 @@
                 color: #e63946;
                 margin-bottom: 6px;
             }
-            #text-box .accent { color: inherit; border: 1.5px solid #ff6b35; padding: 1px 5px; }
-            #text-box .china { color: inherit; border: 1.5px solid #e63946; padding: 1px 5px; }
-            #text-box .western { color: inherit; border: 1.5px solid #457b9d; padding: 1px 5px; }
-            #text-box .gold { color: inherit; border: 1.5px solid #f1c40f; padding: 1px 5px; }
+            #text-box .accent  { color: #fff; background: #ff6b35; padding: 2px 6px; border-radius: 2px; }
+            #text-box .china   { color: #fff; background: #e63946; padding: 2px 6px; border-radius: 2px; }
+            #text-box .western { color: #fff; background: #457b9d; padding: 2px 6px; border-radius: 2px; }
+            #text-box .gold    { color: #fff; background: #b8860b; padding: 2px 6px; border-radius: 2px; }
+            /* minerals chapter overrides accent to red */
+            #text-box .accent-red { color: #fff; background: #e63946; padding: 2px 6px; border-radius: 2px; }
             .sat-compare { display: flex; gap: 8px; margin: 14px 0 6px; }
             .sat-compare figure { flex: 1; margin: 0; overflow: hidden; }
             .sat-compare img { width: 125%; margin-left: -12.5%; border-radius: 3px; display: block; }
@@ -290,31 +292,30 @@
                 scroll-snap-align: start;
             }
             #hero h1 {
-                font-size: 6rem;
+                font-size: 3vw;
                 font-family: 'Barlow Semi Condensed', sans-serif;
                 font-weight: 700;
                 line-height: 1.05;
                 max-width: 80vw;
             }
             #hero .subtitle {
-                font-size: 2vh;
+                font-size: 1.2vw;
                 padding-bottom: 50vh;
                 color: #000000;
-                margin-top: 24px;
-                max-width: 55vw;
+                margin-top: 2vh;
+                font-style: italic;
+                max-width: 45vw;
                 line-height: 1.5;
             }
             #hero .scroll-hint {
-                margin-top: 32px;
+                margin-top: 15vh;
                 margin-bottom: 0;
-                font-size: 1.5vh;
+                font-size: 1vw;
                 color: #e63946;
                 letter-spacing: 1px;
-                text-transform: uppercase;
-                border: 1.5px solid #e63946;
                 padding: 0.8vh 7vw;
                 display: inline-block;
-                animation: pulse 2s ease-in-out infinite;
+                animation: pulse 2s infinite; 
             }
             @keyframes pulse {
                 0%,
@@ -355,14 +356,94 @@
                 color: #444;
                 margin-top: 30px;
             }
+            /* ── Legend box ── */
+            #legend {
+                position: fixed;
+                z-index: 10;
+                left: 11vw;
+                /* sits directly under text-box: top(5vh) + height(40vh) + small gap */
+                top: calc(5vh + 40vh + 10px);
+                width: 30vw;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 6px 14px;
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
+                pointer-events: none;
+            }
+            #legend.show {
+                opacity: 1;
+                visibility: visible;
+            }
+            .legend-item {
+                display: flex;
+                align-items: center;
+                gap: 7px;
+                font-family: "Barlow Semi Condensed", sans-serif;
+                font-size: 0.75vw;
+                font-weight: 500;
+                color: #222;
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                white-space: nowrap;
+            }
+            /* Swatch shapes */
+            .lg-line {
+                width: 22px; height: 3px;
+                border-radius: 2px;
+                flex-shrink: 0;
+            }
+            .lg-line-dash {
+                width: 22px; height: 0;
+                border-top: 2.5px dashed currentColor;
+                flex-shrink: 0;
+            }
+            .lg-dot {
+                width: 10px; height: 10px;
+                border-radius: 50%;
+                flex-shrink: 0;
+            }
+            .lg-fill {
+                width: 14px; height: 14px;
+                border-radius: 2px;
+                flex-shrink: 0;
+            }
+            .lg-fill-outline {
+                width: 14px; height: 14px;
+                border-radius: 2px;
+                flex-shrink: 0;
+                border: 1.5px dashed;
+            }
+
+            /* ── Text-box slide-up snap animation ── */
+            /* The content wrapper gets a clip + slide when new text enters */
+            #text-box-content {
+                /* clip so slide doesn't overflow text-box */
+                overflow: hidden;
+            }
+            #text-box-content.slide-out {
+                animation: slideOut 0.18s ease forwards;
+            }
+            #text-box-content.slide-in {
+                animation: slideIn 0.22s ease forwards;
+            }
+            @keyframes slideOut {
+                from { opacity: 1; transform: translateY(0); }
+                to   { opacity: 0; transform: translateY(-18px); }
+            }
+            @keyframes slideIn {
+                from { opacity: 0; transform: translateY(22px); }
+                to   { opacity: 1; transform: translateY(0); }
+            }
         </style>
     </head>
 
     <body>
         <div id="hero">
-            <h1>Lobito-korridoren</h1>
+            <h1>LOBITO-KORRIDOREN</h1>
             <p class="subtitle">
-              Jernbanen, der er et af de største vestlige infrastrukturprojekter i Afrika i nyere tid, og en del af en større plan om at sikre vestens adgang til kritiske ressourcer. Denne artikel følger jernbanens rute fra Atlanterhavet ind i hjertet af kobberbæltet, og stiller spørgsmålet om, hvem der i sidste ende kommer til at få mest fordel af den.        
+              Jernbanen, der er et af de største vestlige infrastrukturprojekter i Afrika i nyere tid, og en del af en større plan om at sikre vestens adgang til kritiske ressourcer.   
             </p>
             <div class="scroll-hint">Scroll ned for at læse artiklen &#x2193;</div>
         </div>
@@ -374,6 +455,7 @@
 
         <div id="text-box"><div id="text-box-content"></div></div>
         <div id="chapter-title"></div>
+        <div id="legend"></div>
 
         <div id="scrolly">
             <!-- KAPITEL 1: Introduktion -->
@@ -402,7 +484,7 @@
                         I gr&aelig;nseomr&aring;det mellem DR Congo og Zambia
                         ligger nemlig et af verdens mest mineralrige omr&aring;der.
                         Her findes enorme forekomster af
-                        <span class="accent">kobber</span>, <span class="accent">kobolt</span> og
+                        <span class="accent-red">kobber</span>, <span class="accent-red">kobolt</span> og
                         andre kritiske r&aring;stoffer.
                     </p>
                     <p>
@@ -755,7 +837,7 @@
                     layers:["corridor-full","sv-line","sv-dot","sv-label","discovery-dots","discovery-labels"]
                 },
                 biden: {
-                    center:[-32,18], zoom:2.8, pitch:0, bearing:0,
+                    center:[-30,37.7], zoom:2.5, pitch:0, bearing:0,
                     layers:["corridor-full","sv-line","dc-line","sv-dot","dc-dot","sv-label","dc-label","luanda-dot","luanda-label","discovery-dots"]
                 },
                 question: {
@@ -864,25 +946,25 @@
                     paint:{"line-color":"#e63946","line-width":2.5,"line-opacity":0.2},layout:{visibility:"none"}});
 
                 map.addLayer({id:"facilities-chinese",type:"circle",source:"facilities-chinese",
-                    paint:{"circle-radius":6,"circle-color":"#e63946","circle-stroke-width":1.5,"circle-stroke-color":"#fff","circle-opacity":0.9},
+                    paint:{"circle-radius":6,"circle-color":"#e63946","circle-opacity":0.9},
                     layout:{visibility:"none"}});
                 map.addLayer({id:"facilities-chinese-labels",type:"symbol",source:"facilities-chinese",
                     layout:{"text-field":["get","FeatureNam"],"text-size":11,"text-offset":[0,1.5],"text-anchor":"top",visibility:"none"},
-                    paint:{"text-color":"#e63946","text-halo-color":"#fff","text-halo-width":1.5}});
+                    paint:{"text-color":"#e63946","text-halo-color":"rgba(0,0,0,0)","text-halo-width":0}});
 
                 map.addLayer({id:"facilities-western",type:"circle",source:"facilities-western",
-                    paint:{"circle-radius":6,"circle-color":"#457b9d","circle-stroke-width":1.5,"circle-stroke-color":"#fff","circle-opacity":0.9},
+                    paint:{"circle-radius":6,"circle-color":"#457b9d","circle-opacity":0.9},
                     layout:{visibility:"none"}});
                 map.addLayer({id:"facilities-western-labels",type:"symbol",source:"facilities-western",
                     layout:{"text-field":["get","FeatureNam"],"text-size":11,"text-offset":[0,1.5],"text-anchor":"top",visibility:"none"},
-                    paint:{"text-color":"#457b9d","text-halo-color":"#fff","text-halo-width":1.5}});
+                    paint:{"text-color":"#457b9d","text-halo-color":"rgba(0,0,0,0)","text-halo-width":0}});
 
                 map.addLayer({id:"discovery-dots",type:"circle",source:"discovery",
-                    paint:{"circle-radius":9,"circle-color":"#f1c40f","circle-stroke-width":2.5,"circle-stroke-color":"#fff","circle-opacity":0.95},
+                    paint:{"circle-radius":9,"circle-color":"#f1c40f","circle-opacity":0.95},
                     layout:{visibility:"none"}});
                 map.addLayer({id:"discovery-labels",type:"symbol",source:"discovery",
                     layout:{"text-field":["get","name"],"text-size":13,"text-offset":[0,2],"text-anchor":"top","text-allow-overlap":true,visibility:"none"},
-                    paint:{"text-color":"#f1c40f","text-halo-color":"#fff","text-halo-width":1.5}});
+                    paint:{"text-color":"#f1c40f","text-halo-color":"rgba(0,0,0,0)","text-halo-width":0}});
 
                 map.addLayer({id:"sv-line",type:"line",source:"sv-arc",
                     paint:{"line-color":"#f1c40f","line-width":1.5,"line-opacity":0.5,"line-dasharray":[6,4]},layout:{visibility:"none"}});
@@ -890,21 +972,21 @@
                     paint:{"line-color":"#457b9d","line-width":1.5,"line-opacity":0.5,"line-dasharray":[6,4]},layout:{visibility:"none"}});
 
                 map.addLayer({id:"sv-dot",type:"circle",source:"us-endpoints",filter:["==",["get","ep"],"sv"],
-                    paint:{"circle-radius":7,"circle-color":"#f1c40f","circle-stroke-width":2,"circle-stroke-color":"#fff"},layout:{visibility:"none"}});
+                    paint:{"circle-radius":7,"circle-color":"#f1c40f"},layout:{visibility:"none"}});
                 map.addLayer({id:"dc-dot",type:"circle",source:"us-endpoints",filter:["==",["get","ep"],"dc"],
-                    paint:{"circle-radius":7,"circle-color":"#457b9d","circle-stroke-width":2,"circle-stroke-color":"#fff"},layout:{visibility:"none"}});
+                    paint:{"circle-radius":7,"circle-color":"#457b9d"},layout:{visibility:"none"}});
                 map.addLayer({id:"sv-label",type:"symbol",source:"us-endpoints",filter:["==",["get","ep"],"sv"],
                     layout:{"text-field":["get","name"],"text-size":13,"text-offset":[0,1.8],"text-anchor":"top","text-allow-overlap":true,visibility:"none"},
-                    paint:{"text-color":"#f1c40f","text-halo-color":"#fff","text-halo-width":1.5}});
+                    paint:{"text-color":"#f1c40f","text-halo-color":"rgba(0,0,0,0)","text-halo-width":0}});
                 map.addLayer({id:"dc-label",type:"symbol",source:"us-endpoints",filter:["==",["get","ep"],"dc"],
                     layout:{"text-field":["get","name"],"text-size":13,"text-offset":[0,1.8],"text-anchor":"top","text-allow-overlap":true,visibility:"none"},
-                    paint:{"text-color":"#457b9d","text-halo-color":"#fff","text-halo-width":1.5}});
+                    paint:{"text-color":"#457b9d","text-halo-color":"rgba(0,0,0,0)","text-halo-width":0}});
 
                 map.addLayer({id:"luanda-dot",type:"circle",source:"us-endpoints",filter:["==",["get","ep"],"luanda"],
-                    paint:{"circle-radius":7,"circle-color":"#ff8c00","circle-stroke-width":2,"circle-stroke-color":"#fff"},layout:{visibility:"none"}});
+                    paint:{"circle-radius":7,"circle-color":"#ff8c00"},layout:{visibility:"none"}});
                 map.addLayer({id:"luanda-label",type:"symbol",source:"us-endpoints",filter:["==",["get","ep"],"luanda"],
                     layout:{"text-field":["get","name"],"text-size":13,"text-offset":[0,1.8],"text-anchor":"top","text-allow-overlap":true,visibility:"none"},
-                    paint:{"text-color":"#ff8c00","text-halo-color":"#fff","text-halo-width":1.5}});
+                    paint:{"text-color":"#ff8c00","text-halo-color":"rgba(0,0,0,0)","text-halo-width":0}});
 
                 map.addLayer({id:"cities-labels",type:"symbol",source:"cities",
                     layout:{"text-field":["get","name"],"text-size":["interpolate",["linear"],["get","pop_max"],10000,10,100000,12,500000,14,1000000,16],
@@ -930,7 +1012,95 @@
                 const textBoxWrapper = document.getElementById("text-box");
                 const textBox = document.getElementById("text-box-content");
                 const chapterTitle = document.getElementById("chapter-title");
+                const legendEl = document.getElementById("legend");
                 let currentChapterId = null;
+
+                /* Legend definitions per chapter */
+                const LEGENDS = {
+                    intro: [
+                        {type:"line", color:"#457b9d", label:"Lobito-korridoren"},
+                    ],
+                    benguela: [
+                        {type:"line",  color:"#ff8c00", label:"Benguela-jernbanen"},
+                        {type:"line-dash", color:"#e63946", label:"Planlagt forlængelse"},
+                    ],
+                    "civil-war": [
+                        {type:"line-dash", color:"#555", label:"Ødelagt jernbane (borgerkrig)"},
+                    ],
+                    minerals: [
+                        {type:"fill-outline", color:"#e63946", label:"Kobberbæltet"},
+                        {type:"fill", color:"#a855f7", label:"Mineprojekter (satellit)"},
+                    ],
+                    china: [
+                        {type:"line",  color:"#457b9d", label:"Lobito-korridoren"},
+                        {type:"dot",   color:"#e63946", label:"Kinesisk-ejet anlæg"},
+                    ],
+                    kolwezi: [
+                        {type:"line",  color:"#457b9d", label:"Lobito-korridoren"},
+                        {type:"fill",  color:"#a855f7", label:"Mineprojekter (satellit)"},
+                        {type:"dot",   color:"#e63946", label:"Kinesisk-ejet anlæg"},
+                    ],
+                    kolwezimine: [
+                        {type:"fill",  color:"#a855f7", label:"Mineområde"},
+                    ],
+                    western: [
+                        {type:"line",  color:"#457b9d", label:"Lobito-korridoren"},
+                        {type:"dot",   color:"#457b9d", label:"Vestligt ejet anlæg"},
+                    ],
+                    kobold: [
+                        {type:"line",  color:"#457b9d", label:"Lobito-korridoren"},
+                        {type:"dot",   color:"#f1c40f", label:"KoBold-fund (Mingomba / Manono)"},
+                    ],
+                    "silicon-valley": [
+                        {type:"line-dash", color:"#f1c40f", label:"Silicon Valley → kobbermine"},
+                        {type:"dot",   color:"#f1c40f", label:"Silicon Valley"},
+                    ],
+                    biden: [
+                        {type:"line-dash", color:"#f1c40f", label:"Silicon Valley → kobbermine"},
+                        {type:"line-dash", color:"#457b9d", label:"Washington D.C. → Angola"},
+                        {type:"dot",   color:"#ff8c00", label:"Luanda, Angola"},
+                    ],
+                    question: [
+                        {type:"line",  color:"#457b9d", label:"Lobito-korridoren"},
+                        {type:"dot",   color:"#e63946", label:"Kinesisk-ejet anlæg"},
+                        {type:"dot",   color:"#457b9d", label:"Vestligt ejet anlæg"},
+                        {type:"dot",   color:"#f1c40f", label:"KoBold-fund"},
+                        {type:"fill",  color:"#a855f7", label:"Mineområder"},
+                    ],
+                    evictions: [
+                        {type:"line",  color:"#457b9d", label:"Lobito-korridoren"},
+                        {type:"fill",  color:"#a855f7", label:"Mineområder"},
+                    ],
+                    "legal-gap": [
+                        {type:"line",  color:"#457b9d", label:"Lobito-korridoren"},
+                        {type:"fill",  color:"#a855f7", label:"Mineområder"},
+                    ],
+                };
+
+                function renderLegend(chapterId) {
+                    const items = LEGENDS[chapterId] || [];
+                    if(items.length === 0) {
+                        legendEl.classList.remove("show");
+                        legendEl.innerHTML = "";
+                        return;
+                    }
+                    legendEl.innerHTML = items.map(item => {
+                        let swatch = "";
+                        if(item.type === "line") {
+                            swatch = `<span class="lg-line" style="background:${item.color}"></span>`;
+                        } else if(item.type === "line-dash") {
+                            swatch = `<span class="lg-line-dash" style="color:${item.color}"></span>`;
+                        } else if(item.type === "dot") {
+                            swatch = `<span class="lg-dot" style="background:${item.color}"></span>`;
+                        } else if(item.type === "fill") {
+                            swatch = `<span class="lg-fill" style="background:${item.color};opacity:0.6"></span>`;
+                        } else if(item.type === "fill-outline") {
+                            swatch = `<span class="lg-fill-outline" style="background:${item.color}22;border-color:${item.color}"></span>`;
+                        }
+                        return `<div class="legend-item">${swatch}<span>${item.label}</span></div>`;
+                    }).join("");
+                    legendEl.classList.add("show");
+                }
 
                 function showFixedUi() {
                     textBoxWrapper.classList.add("show");
@@ -940,10 +1110,11 @@
                 function hideFixedUi() {
                     textBoxWrapper.classList.remove("show");
                     chapterTitle.classList.remove("show");
+                    legendEl.classList.remove("show");
                     currentChapterId = null;
                 }
 
-                function swapText(html) {
+                function swapText(html, chapterId) {
                     const tmp = document.createElement("div");
                     tmp.innerHTML = html;
                     const h2 = tmp.querySelector("h2");
@@ -952,11 +1123,20 @@
                         h2.remove();
                     }
                     showFixedUi();
-                    textBox.classList.add("fading");
+
+                    /* Slide old content up and out, then slide new content up and in */
+                    textBox.classList.remove("slide-in");
+                    textBox.classList.add("slide-out");
                     setTimeout(() => {
                         textBox.innerHTML = tmp.innerHTML;
-                        textBox.classList.remove("fading");
-                    }, 120);
+                        textBox.scrollTop = 0;
+                        textBox.classList.remove("slide-out");
+                        textBox.classList.add("slide-in");
+                        /* clean up animation class after it finishes */
+                        setTimeout(() => textBox.classList.remove("slide-in"), 250);
+                    }, 180);
+
+                    renderLegend(chapterId);
                 }
 
                 const scroller = scrollama();
@@ -970,7 +1150,7 @@
 
                         /* Swap text in fixed box */
                         const inner = element.querySelector(".step-inner");
-                        if(inner) swapText(inner.innerHTML);
+                        if(inner) swapText(inner.innerHTML, chapterId);
 
                         map.flyTo({
                             center:chapter.center, zoom:chapter.zoom,
