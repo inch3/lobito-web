@@ -145,42 +145,24 @@
                 border-radius: .1rem;
             }
 
-            #sat-sidecard {
+            .sat-fullscreen {
                 position: fixed;
-                top: 5vh;
-                left: calc(11vw + 30vw + 2vw);
-                width: 30vw;
-                height: 40vh;
-                z-index: 9;
-                opacity: 0;
-                visibility: hidden;
-                pointer-events: none;
-                transform: translateY(12vh);
-                transition:
-                    opacity 0.1s ease,
-                    visibility 0.1s ease,
-                    transform 0.14s ease;
-            }
-            #sat-sidecard.show {
-                opacity: 1;
-                visibility: visible;
-                transform: translateY(0);
-            }
-            #sat-sidecard img {
-                position: absolute;
-                inset: 0;
-                width: 100%;
-                height: 100%;
+                top: 25px;
+                left: 10rem;
+                width: calc(100vw - 20rem);
+                height: calc(100vh - 50px);
+                z-index: 1;
                 object-fit: cover;
                 border-radius: 4px;
                 opacity: 0;
-                transition: opacity 0.16s ease;
+                visibility: hidden;
+                transition: opacity 0.12s ease, visibility 0.12s ease;
+                pointer-events: none;
                 filter: grayscale(1);
-                box-shadow: 0 12px 28px rgba(0,0,0,0.14);
-                background: #f3f3f3;
             }
-            #sat-sidecard img.active {
+            .sat-fullscreen.show {
                 opacity: 1;
+                visibility: visible;
             }
 
             /* ── Fixed text box ── */
@@ -454,47 +436,6 @@
                 from { opacity: 0; transform: translateY(22px); }
                 to   { opacity: 1; transform: translateY(0); }
             }
-
-            @media (max-width: 900px) {
-                #map {
-                    left: 0;
-                    top: 0;
-                    width: 100vw;
-                    height: 100vh;
-                    border-radius: 0;
-                }
-                #text-box {
-                    left: 5vw;
-                    width: 90vw;
-                    height: 28vh;
-                    top: auto;
-                    bottom: 18vh;
-                    padding: 22px 18px;
-                }
-                #text-box p {
-                    font-size: 15px;
-                }
-                #chapter-title {
-                    left: 5vw;
-                    bottom: 9vh;
-                    font-size: 20px;
-                }
-                #legend {
-                    left: 5vw;
-                    top: auto;
-                    bottom: 2.5vh;
-                    width: 90vw;
-                }
-                .legend-item {
-                    font-size: 11px;
-                }
-                #sat-sidecard {
-                    left: 5vw;
-                    width: 90vw;
-                    height: 22vh;
-                    top: 5vh;
-                }
-            }
         </style>
     </head>
 
@@ -509,10 +450,8 @@
 
         <div id="map"></div>
 
-        <div id="sat-sidecard" aria-hidden="true">
-            <img id="sat-2015" src="data/Screenshot%202026-03-26%20at%2000.06.28.png" alt="Kolwezi 2015">
-            <img id="sat-2025" src="data/Screenshot%202026-03-26%20at%2000.06.05.png" alt="Kolwezi 2025">
-        </div>
+        <img id="sat-2015" class="sat-fullscreen" src="data/Screenshot%202026-03-26%20at%2000.06.28.png" alt="Kolwezi 2025">
+        <img id="sat-2025" class="sat-fullscreen" src="data/Screenshot%202026-03-26%20at%2000.06.05.png" alt="Kolwezi 2015">
 
         <div id="text-box"><div id="text-box-content"></div></div>
         <div id="chapter-title"></div>
@@ -638,17 +577,31 @@
                 </div>
             </div>
 
-            <!-- KAPITEL 4.1: Kolwezi (samlet med billede-toggle) -->
+            <!-- KAPITEL 4.1: Kolwezi mine før genåbning -->
             <div class="step" data-chapter="kolwezimine">
                 <div class="step-inner">
                     <h2>Kolwezi, Zambia</h2>
                     <p>
-                        Her ser du et sattelit billede af kvarteret i Kolwezi i 2015, da minen endnu ikke var genåbnet. Området består mest af beboelse og naturområder.
-                        Hvis du trykker på knappen nedenfor, kan du se, hvordan området så ud i 2025 efter flere års intensiv minedrift og udvidelse af gruben. En stor del af det eksisterende byområde er blevet opslugt af minen, mens der vest for minen er opstået nye beboelsesområder. 
+                        Her ser du et satellitbillede af kvarteret i Kolwezi i 2015, da minen endnu ikke var genåbnet. Området består mest af beboelse og naturområder.
                     </p>
-                    <div style="margin: 18px 0 10px;">
-                        <button id="toggle-sat-btn" style="font-size:14px;padding:6px 18px;border-radius:4px;border:1.5px solid #888;background:#fff;cursor:pointer;">Vis 2025</button>
-                    </div>
+                    <p class="attribution">
+                        Satellit: Google Earth, 2015. Kilde: Amnesty International
+                    </p>
+                </div>
+            </div>
+
+            <!-- KAPITEL 4.2: Kolwezi mine efter udvidelse -->
+            <div class="step" data-chapter="kolwezimine-2025">
+                <div class="step-inner">
+                    <h2>Kolwezi, Zambia</h2>
+                    <p>
+                        På næste billede ser du det samme område i 2025 efter flere års intensiv minedrift og udvidelse af gruben. En stor del af det eksisterende byområde er blevet opslugt af minen, mens der vest for minen er opstået nye beboelsesområder.
+                    </p>
+                    <p class="attribution">
+                        Satellit: Google Earth, 2025. Kilde: Amnesty International
+                    </p>
+                </div>
+            </div>
                     <p class="attribution">
                         Satellit: Google Earth, 2015 & 2025. Kilde: Amnesty International
                     </p>
@@ -882,7 +835,7 @@
                     layers:["corridor-full","facilities-chinese","facilities-chinese-labels","maus-polygons","cities-labels"]
                 },
                 kolwezimine: {
-                    center:[25.4265,-10.7155], zoom:12, pitch:25, bearing:-5,
+                    center:[25.4265,-10.6855], zoom:15.5, pitch:0, bearing:0,
                     layers:["corridor-full","maus-polygons","facilities-chinese","facilities-chinese-labels","facilities-western","facilities-western-labels","cities-labels"]
                 },
                 western: {
@@ -1074,9 +1027,6 @@
                 const textBox = document.getElementById("text-box-content");
                 const chapterTitle = document.getElementById("chapter-title");
                 const legendEl = document.getElementById("legend");
-                const satSidecard = document.getElementById("sat-sidecard");
-                const sat2015 = document.getElementById("sat-2015");
-                const sat2025 = document.getElementById("sat-2025");
                 let currentChapterId = null;
 
                 /* Legend definitions per chapter */
@@ -1105,6 +1055,9 @@
                         {type:"dot",   color:"#e63946", label:"Kinesisk-ejet anlæg"},
                     ],
                     kolwezimine: [
+                        {type:"fill",  color:"#a855f7", label:"Mineområde"},
+                    ],
+                    "kolwezimine-2025": [
                         {type:"fill",  color:"#a855f7", label:"Mineområde"},
                     ],
                     western: [
@@ -1175,7 +1128,6 @@
                     textBoxWrapper.classList.remove("show");
                     chapterTitle.classList.remove("show");
                     legendEl.classList.remove("show");
-                    hideKolweziSidecard();
                     currentChapterId = null;
                 }
 
@@ -1202,35 +1154,6 @@
                     }, 180);
 
                     renderLegend(chapterId);
-                }
-
-                window.showing2025 = false;
-                window.setKolweziOverlay = function(is2025){
-                    const btn = document.getElementById("toggle-sat-btn");
-                    if(!sat2015 || !sat2025) return;
-                    sat2015.classList.toggle("active", !is2025);
-                    sat2025.classList.toggle("active", is2025);
-                    if(btn) btn.textContent = is2025 ? "Vis 2015" : "Vis 2025";
-                    window.showing2025 = is2025;
-                };
-
-                function showKolweziSidecard() {
-                    satSidecard.classList.add("show");
-                }
-
-                function hideKolweziSidecard() {
-                    satSidecard.classList.remove("show");
-                    sat2015.classList.remove("active");
-                    sat2025.classList.remove("active");
-                }
-
-                if(!window._kolweziToggleBound){
-                    document.body.addEventListener("click", function(e){
-                        if(e.target && e.target.id === "toggle-sat-btn") {
-                            window.setKolweziOverlay(!window.showing2025);
-                        }
-                    });
-                    window._kolweziToggleBound = true;
                 }
 
                 const scroller = scrollama();
@@ -1264,17 +1187,13 @@
                         map.setPaintProperty("copper-tracts-outline","line-opacity",1);
                         map.setPaintProperty("maus-polygons","fill-opacity",0.5);
 
-                        if(chapterId === "kolwezimine"){
-                            function showKolweziSideImage() {
-                                window.setKolweziOverlay(false);
-                                showKolweziSidecard();
-                            }
-                            showKolweziSideImage();
+                                                if(chapterId === "kolwezimine"){
+                            showKolweziSidecard(2015);
+                        } else if(chapterId === "kolwezimine-2025"){
+                            showKolweziSidecard(2025);
                         } else {
                             hideKolweziSidecard();
                         }
-
-                       
 
                         /* Civil-war: grey out + dim the whole railway to show it was destroyed */
                         if(chapter.dimBenguela){

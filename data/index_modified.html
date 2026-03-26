@@ -149,7 +149,7 @@
                 position: fixed;
                 top: 5vh;
                 left: calc(11vw + 30vw + 2vw);
-                width: 30vw;
+                width: 24vw;
                 height: 40vh;
                 z-index: 9;
                 opacity: 0;
@@ -157,9 +157,9 @@
                 pointer-events: none;
                 transform: translateY(12vh);
                 transition:
-                    opacity 0.1s ease,
-                    visibility 0.1s ease,
-                    transform 0.14s ease;
+                    opacity 0.18s ease,
+                    visibility 0.18s ease,
+                    transform 0.28s cubic-bezier(.2,.8,.2,1);
             }
             #sat-sidecard.show {
                 opacity: 1;
@@ -882,7 +882,7 @@
                     layers:["corridor-full","facilities-chinese","facilities-chinese-labels","maus-polygons","cities-labels"]
                 },
                 kolwezimine: {
-                    center:[25.4265,-10.7155], zoom:12, pitch:25, bearing:-5,
+                    center:[25.4265,-10.6855], zoom:15.5, pitch:0, bearing:0,
                     layers:["corridor-full","maus-polygons","facilities-chinese","facilities-chinese-labels","facilities-western","facilities-western-labels","cities-labels"]
                 },
                 western: {
@@ -1269,12 +1269,14 @@
                                 window.setKolweziOverlay(false);
                                 showKolweziSidecard();
                             }
-                            showKolweziSideImage();
+                            if(map.isMoving()){
+                                map.once("moveend", showKolweziSideImage);
+                            } else {
+                                showKolweziSideImage();
+                            }
                         } else {
                             hideKolweziSidecard();
                         }
-
-                       
 
                         /* Civil-war: grey out + dim the whole railway to show it was destroyed */
                         if(chapter.dimBenguela){
